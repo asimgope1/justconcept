@@ -6,6 +6,7 @@ import DashboardScreen from '../screens/DashboardScreen';
 import StudentScreen from '../screens/StudentScreen';
 import TimetableScreen from '../screens/TimetableScreen';
 import CalendarScreen from '../screens/CalendarScreen';
+import LoginScreen from '../screens/LoginScreens';
 
 const Drawer = createDrawerNavigator();
 
@@ -33,6 +34,11 @@ const DrawerNavigator = () => {
       <Drawer.Screen
         name="Calendar"
         component={CalendarScreen}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="LogOut"
+        component={LoginScreen}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>

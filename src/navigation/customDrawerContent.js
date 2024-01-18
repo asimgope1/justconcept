@@ -54,7 +54,7 @@ const CustomDrawerContent = ({navigation}) => {
             fontSize: 20,
             color: 'black',
           }}>
-          Calendar
+          Holiday
         </Text>
       </TouchableOpacity>
     </View>

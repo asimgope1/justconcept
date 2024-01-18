@@ -4,8 +4,16 @@ import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import {Calendar} from 'react-native-calendars';
+import Storage from '../utils/Storage';
 
 const DashboardScreen = ({navigation}) => {
+  const handleLogout = async () => {
+    await Storage.clearStorage();
+    await Storage.setAuthenticatedStatus(false);
+
+    navigation.navigate('Login');
+  };
+
   return (
     <SafeAreaView>
       <StatusBar backgroundColor="transparent" barStyle="light-content" />
@@ -23,9 +31,10 @@ const DashboardScreen = ({navigation}) => {
         <Calendar
           style={{
             borderWidth: 1,
+            margin: 50,
             borderColor: 'gray',
-            height: 450,
-            width: 400,
+            height: 350,
+            width: 350,
           }}
           theme={{
             backgroundColor: '#ffffff',

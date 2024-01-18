@@ -28,19 +28,10 @@ const Header = ({title, onPress}) => {
       <TouchableOpacity
         style={{
           height: 40,
-          width: 100,
-          justifyContent: 'center',
-          alignItems: 'center',
+          width: '7%',
+          justifyContent: 'flex-end',
         }}
         onPress={onPress}>
-        {/* <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 14,
-            color: 'black',
-          }}>
-          Open Drawer
-        </Text> */}
         <Image
           style={{
             height: 30,
