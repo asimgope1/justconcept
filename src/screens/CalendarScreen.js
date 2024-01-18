@@ -1,11 +1,25 @@
-import {View, Text} from 'react-native';
+/* eslint-disable prettier/prettier */
+import {View, Text, SafeAreaView, StatusBar} from 'react-native';
 import React from 'react';
+import Header from '../components/Header';
 
-const CalendarScreen = () => {
+const CalendarScreen = ({navigation}) => {
   return (
-    <View>
-      <Text>CalendarScreen</Text>
-    </View>
+    <SafeAreaView>
+      <StatusBar backgroundColor="transparent" barStyle="light-content" />
+
+      <Header title="Calendar" onPress={() => navigation.openDrawer()} />
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        {/* Main Content of DashboardScreen */}
+        <Text>CalendarScreen</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 

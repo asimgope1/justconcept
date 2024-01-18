@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-// DrawerNavigator.js
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawerContent from './customDrawerContent';
@@ -14,11 +13,28 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       initialRouteName="Dashboard"
-      drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-      <Drawer.Screen name="Student" component={StudentScreen} />
-      <Drawer.Screen name="Timetable" component={TimetableScreen} />
-      <Drawer.Screen name="Calendar" component={CalendarScreen} />
+      drawerContent={props => <CustomDrawerContent {...props} />}
+      drawerPosition="right">
+      <Drawer.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="Student"
+        component={StudentScreen}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="Timetable"
+        component={TimetableScreen}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="Calendar"
+        component={CalendarScreen}
+        options={{headerShown: false}}
+      />
     </Drawer.Navigator>
   );
 };
