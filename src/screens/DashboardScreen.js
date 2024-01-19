@@ -7,6 +7,7 @@ import {
   StatusBar,
   ScrollView,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {Card, Title, Paragraph} from 'react-native-paper';
@@ -20,6 +21,7 @@ const DashboardScreen = ({navigation}) => {
   const [selectedDateDetails, setSelectedDateDetails] = useState(null);
   const [accessToken, setAccessToken] = useState('');
   const [lectureDetails, setLectureDetails] = useState({});
+  const {width, height} = Dimensions.get('window');
 
   useEffect(() => {
     fetchDates();
@@ -97,17 +99,30 @@ const DashboardScreen = ({navigation}) => {
   };
 
   const handleDayPress = date => {
-    if (markedDates[date.dateString]) {
-      const selectedDateDetail = allDates.find(
-        selectedDate => selectedDate === date.dateString,
-      );
-      setSelectedDateDetails(selectedDateDetail);
+    // Create a copy of the current markedDates state
+    const updatedMarkedDates = {...markedDates};
+
+    // Check if the selected date is already marked
+    if (updatedMarkedDates[date.dateString]) {
+      // Date is already marked, toggle the color
+      updatedMarkedDates[date.dateString].dotColor = 'green'; // Set your desired color
     } else {
-      const selectedDateDetail = allDates.find(
-        selectedDate => selectedDate === date.dateString,
-      );
-      setSelectedDateDetails(selectedDateDetail);
+      // Date is not marked, mark it with a different color
+      updatedMarkedDates[date.dateString] = {
+        selected: true,
+        marked: true,
+        dotColor: 'orange', // Set your desired color for the new selection
+        lectureDetails: allDates.find(
+          selectedDate => selectedDate === date.dateString,
+        ),
+      };
     }
+
+    // Update the state with the new markedDates
+    setMarkedDates(updatedMarkedDates);
+
+    // Set the selected date details
+    setSelectedDateDetails(date.dateString);
   };
 
   const handleScreenTap = () => {
@@ -121,17 +136,20 @@ const DashboardScreen = ({navigation}) => {
 
         <Header title="Dashboard" onPress={() => navigation.openDrawer()} />
 
-        <ScrollView>
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>DashboardScreen: {console.log('objects', markedDates)}</Text>
+        <ScrollView
+          contentContainerStyle={{
+            // flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View>
             <Calendar
               style={{
                 borderWidth: 1,
-                margin: 50,
+                margin: 0.03 * width, // Use 5% of screen width as margin
                 borderColor: 'gray',
-                height: 400,
-                width: 350,
+                height: 0.4 * height, // Use 40% of screen height as height
+                width: 0.8 * width, // Use 80% of screen width as width
               }}
               theme={{
                 backgroundColor: '#ffffff',
@@ -148,8 +166,13 @@ const DashboardScreen = ({navigation}) => {
             />
 
             {selectedDateDetails && (
-              <View style={{marginTop: 20, marginBottom: 10}}>
-                <Card style={{width: 350}}>
+              <View
+                style={{
+                  marginTop: 0.05 * height,
+                  marginBottom: 0.01 * height,
+                  alignItems: 'center',
+                }}>
+                <Card style={{width: 0.8 * width}}>
                   <Card.Content>
                     <Title>{selectedDateDetails}</Title>
                     <Paragraph>

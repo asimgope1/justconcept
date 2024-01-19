@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Alert,
   ScrollView,
 } from 'react-native';
 import Storage from '../utils/Storage';
@@ -57,8 +58,12 @@ const LoginScreen = ({onLogin, onLogout}) => {
         // Assuming successful login, you can call onLogin to update authentication status
         onLogin();
       } else {
-        console.error('Login failed:', result.message);
-        // Handle unsuccessful login here if needed
+        // console.error('Login failed:', result.message);
+        // Handle unsuccessful login here
+        Alert.alert(
+          'Login Failed',
+          'Invalid email or password. Please try again.',
+        );
       }
     } catch (error) {
       console.error('Error during login:', error.message);
@@ -76,7 +81,7 @@ const LoginScreen = ({onLogin, onLogout}) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        //   style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Image
           source={LOGO}
@@ -85,6 +90,7 @@ const LoginScreen = ({onLogin, onLogout}) => {
             height: 200,
             resizeMode: 'contain',
             marginBottom: 20,
+            alignSelf: 'center',
           }}
         />
         <View style={styles.textContainer}>
@@ -118,7 +124,11 @@ const LoginScreen = ({onLogin, onLogout}) => {
           </View>
         )}
 
-        <View style={{width: '100%', alignItems: 'flex-start'}}>
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'flex-start',
+          }}>
           <Text
             style={{
               fontSize: 14,
@@ -137,7 +147,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingHorizontal: 20,
   },
   textContainer: {
