@@ -99,30 +99,17 @@ const DashboardScreen = ({navigation}) => {
   };
 
   const handleDayPress = date => {
-    // Create a copy of the current markedDates state
-    const updatedMarkedDates = {...markedDates};
-
-    // Check if the selected date is already marked
-    if (updatedMarkedDates[date.dateString]) {
-      // Date is already marked, toggle the color
-      updatedMarkedDates[date.dateString].dotColor = 'green'; // Set your desired color
+    if (markedDates[date.dateString]) {
+      const selectedDateDetail = allDates.find(
+        selectedDate => selectedDate === date.dateString,
+      );
+      setSelectedDateDetails(selectedDateDetail);
     } else {
-      // Date is not marked, mark it with a different color
-      updatedMarkedDates[date.dateString] = {
-        selected: true,
-        marked: true,
-        dotColor: 'orange', // Set your desired color for the new selection
-        lectureDetails: allDates.find(
-          selectedDate => selectedDate === date.dateString,
-        ),
-      };
+      const selectedDateDetail = allDates.find(
+        selectedDate => selectedDate === date.dateString,
+      );
+      setSelectedDateDetails(selectedDateDetail);
     }
-
-    // Update the state with the new markedDates
-    setMarkedDates(updatedMarkedDates);
-
-    // Set the selected date details
-    setSelectedDateDetails(date.dateString);
   };
 
   const handleScreenTap = () => {
