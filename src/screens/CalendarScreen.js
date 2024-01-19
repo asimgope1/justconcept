@@ -8,9 +8,10 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  ImageBackground, // Import ImageBackground component
-  ActivityIndicator, // Import ActivityIndicator component
+  ImageBackground,
+  ActivityIndicator,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {Card, Title, Paragraph} from 'react-native-paper';
@@ -24,9 +25,19 @@ const CalendarScreen = ({navigation}) => {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [apiResponse, setApiResponse] = useState(null);
-  const [loading, setLoading] = useState(true); // State to manage loading
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const {width, height} = Dimensions.get('window');
+
+  // Move getTodayDate function declaration here
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = `${today.getMonth() + 1}`.padStart(2, '0');
+    const day = `${today.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   useEffect(() => {
     fetchDates();
@@ -34,9 +45,7 @@ const CalendarScreen = ({navigation}) => {
 
   const fetchDates = async () => {
     try {
-      setLoading(true); // Set loading to true before making the API call
-
-      // Retrieve access token from AsyncStorage
+      setLoading(true);
       const storedAccessToken = await Storage.getAccessToken();
 
       if (!storedAccessToken) {
@@ -44,10 +53,8 @@ const CalendarScreen = ({navigation}) => {
         return;
       }
 
-      // Set the access token in state
       setAccessToken(storedAccessToken);
 
-      // Now you can use the access token in your API requests
       const response = await fetch(
         'https://justconcepts.in/app/justconceptapi/public/api/holidaysList',
         {
@@ -66,7 +73,6 @@ const CalendarScreen = ({navigation}) => {
       const apiResponseData = await response.json();
       setApiResponse(apiResponseData);
 
-      // Process API response to mark dates
       const markedDatesData = {};
       apiResponseData.data.forEach(holiday => {
         markedDatesData[holiday.start_date] = {
@@ -79,23 +85,17 @@ const CalendarScreen = ({navigation}) => {
     } catch (error) {
       console.error('Error fetching holidays:', error.message);
     } finally {
-      setLoading(false); // Set loading to false after API call is complete
+      setLoading(false);
+      setRefreshing(false);
     }
   };
 
   const handleDayPress = date => {
     setSelectedDate(date.dateString);
 
-    // Log the selected date to check if it's set correctly
-    console.log('Selected Date:', date.dateString);
-
-    // Find the title for the selected date
     const selectedHoliday = apiResponse?.data.find(
       holiday => holiday.start_date === date.dateString,
     );
-
-    // Log the selected holiday to check if it's found
-    console.log('Selected Holiday:', selectedHoliday);
 
     if (selectedHoliday) {
       setSelectedTitle(selectedHoliday.holiday_title);
@@ -104,12 +104,15 @@ const CalendarScreen = ({navigation}) => {
     }
   };
 
-  // Reset selected date and title on screen tap
   const handleScreenTap = () => {
     setSelectedDate(null);
     setSelectedTitle('');
-    // Dismiss the keyboard (if open)
     Keyboard.dismiss();
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchDates();
   };
 
   return (
@@ -122,7 +125,10 @@ const CalendarScreen = ({navigation}) => {
           style={{flex: 1, resizeMode: 'cover'}}>
           <Header title="Calendar" onPress={() => navigation.openDrawer()} />
 
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
             <View
               style={{
                 flex: 1,
@@ -134,14 +140,15 @@ const CalendarScreen = ({navigation}) => {
                 style={{
                   borderWidth: 1,
                   borderRadius: 8,
-                  margin: 0.03 * width,
+                  margin: 0.05 * width,
+                  marginTop: 0.15 * width,
                   borderColor: 'gray',
                   height: 0.45 * height,
                   width: 0.8 * width,
                 }}
                 theme={{
-                  backgroundColor: 'transparent', // Set background color to transparent
-                  calendarBackground: 'white', // Set calendar background color to transparent
+                  backgroundColor: 'transparent',
+                  calendarBackground: 'white',
                   textSectionTitleColor: '#b6c1cd',
                   selectedDayBackgroundColor: '#00adf5',
                   selectedDayTextColor: '#ffffff',
@@ -151,6 +158,7 @@ const CalendarScreen = ({navigation}) => {
                 }}
                 markedDates={markedDates}
                 onDayPress={handleDayPress}
+                current={getTodayDate()} // Set the initial date
               />
 
               {selectedDate && (

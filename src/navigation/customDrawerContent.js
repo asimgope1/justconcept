@@ -56,6 +56,7 @@ const CustomDrawerContent = ({navigation}) => {
       <View
         style={{
           height: 250,
+          alignSelf: 'center',
         }}>
         <Image
           source={LOGO}
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
+    alignSelf: 'center',
   },
   Email: {
     color: 'white',
