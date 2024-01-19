@@ -8,12 +8,15 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Dimensions,
+  ActivityIndicator,
+  ImageBackground,
+  StyleSheet,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {Card, Title, Paragraph} from 'react-native-paper';
 import Header from '../components/Header';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Storage from '../utils/Storage';
+import {DASHBACK} from '../utils/Imagepath';
 
 const DashboardScreen = ({navigation}) => {
   const [markedDates, setMarkedDates] = useState({});
@@ -21,6 +24,7 @@ const DashboardScreen = ({navigation}) => {
   const [selectedDateDetails, setSelectedDateDetails] = useState(null);
   const [accessToken, setAccessToken] = useState('');
   const [lectureDetails, setLectureDetails] = useState({});
+  const [loading, setLoading] = useState(true);
   const {width, height} = Dimensions.get('window');
 
   useEffect(() => {
@@ -88,6 +92,8 @@ const DashboardScreen = ({navigation}) => {
       }
     } catch (error) {
       console.error('Fetch error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -99,111 +105,139 @@ const DashboardScreen = ({navigation}) => {
   };
 
   const handleDayPress = date => {
-    if (markedDates[date.dateString]) {
-      const selectedDateDetail = allDates.find(
-        selectedDate => selectedDate === date.dateString,
-      );
-      setSelectedDateDetails(selectedDateDetail);
-    } else {
-      const selectedDateDetail = allDates.find(
-        selectedDate => selectedDate === date.dateString,
-      );
-      setSelectedDateDetails(selectedDateDetail);
-    }
-  };
+    const selectedDateDetail = allDates.find(
+      selectedDate => selectedDate === date.dateString,
+    );
 
-  const handleScreenTap = () => {
-    setSelectedDateDetails(null);
+    setSelectedDateDetails(selectedDateDetail);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handleScreenTap}>
-      <SafeAreaView>
+    <TouchableWithoutFeedback>
+      <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor="transparent" barStyle="light-content" />
 
-        <Header title="Dashboard" onPress={() => navigation.openDrawer()} />
+        <ImageBackground source={DASHBACK} style={styles.backgroundImage}>
+          <Header title="Dashboard" onPress={() => navigation.openDrawer()} />
 
-        <ScrollView
-          contentContainerStyle={{
-            // flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View>
-            <Calendar
-              style={{
-                borderWidth: 1,
-                margin: 0.03 * width, // Use 5% of screen width as margin
-                borderColor: 'gray',
-                height: 0.4 * height, // Use 40% of screen height as height
-                width: 0.8 * width, // Use 80% of screen width as width
-              }}
-              theme={{
-                backgroundColor: '#ffffff',
-                calendarBackground: '#ffffff',
-                textSectionTitleColor: '#b6c1cd',
-                selectedDayBackgroundColor: '#00adf5',
-                selectedDayTextColor: '#ffffff',
-                todayTextColor: '#00adf5',
-                dayTextColor: '#2d4150',
-                textDisabledColor: '#d9e',
-              }}
-              markedDates={markedDates}
-              onDayPress={handleDayPress}
-            />
+          <ScrollView contentContainerStyle={styles.contentContainer}>
+            <View>
+              {loading ? (
+                <ActivityIndicator size="large" color="#a347ff" />
+              ) : (
+                <Calendar
+                  style={styles.calendar}
+                  theme={{
+                    backgroundColor: 'transparent',
+                    calendarBackground: 'white',
+                    textSectionTitleColor: '#b6c1cd',
+                    selectedDayBackgroundColor: '#00adf5',
+                    selectedDayTextColor: '#ffffff',
+                    todayTextColor: '#00adf5',
+                    dayTextColor: '#2d4150',
+                    textDisabledColor: '#d9e',
+                  }}
+                  markedDates={markedDates}
+                  onDayPress={handleDayPress}
+                />
+              )}
 
-            {selectedDateDetails && (
-              <View
-                style={{
-                  marginTop: 0.05 * height,
-                  marginBottom: 0.01 * height,
-                  alignItems: 'center',
-                }}>
-                <Card style={{width: 0.8 * width}}>
-                  <Card.Content>
-                    <Title>{selectedDateDetails}</Title>
-                    <Paragraph>
-                      Start Time:{' '}
-                      {
-                        markedDates[selectedDateDetails].lectureDetails
-                          .starttime
-                      }
-                    </Paragraph>
-                    <Paragraph>
-                      End Time:{' '}
-                      {markedDates[selectedDateDetails].lectureDetails.endtime}
-                    </Paragraph>
-                    <Paragraph>
-                      Teacher:{' '}
-                      {
-                        markedDates[selectedDateDetails].lectureDetails
-                          .teachername
-                      }
-                    </Paragraph>
-                    <Paragraph>
-                      Subject:{' '}
-                      {markedDates[selectedDateDetails].lectureDetails.subject}
-                    </Paragraph>
-                    <Paragraph>
-                      Grade:{' '}
-                      {markedDates[selectedDateDetails].lectureDetails.grade}
-                    </Paragraph>
-                    <Paragraph>
-                      Classroom:{' '}
-                      {
-                        markedDates[selectedDateDetails].lectureDetails
-                          .classroom_name
-                      }
-                    </Paragraph>
-                  </Card.Content>
-                </Card>
-              </View>
-            )}
-          </View>
-        </ScrollView>
+              {selectedDateDetails !== null && (
+                <View style={styles.cardContainer}>
+                  <Card style={styles.card}>
+                    <Card.Content>
+                      <Title>{selectedDateDetails}</Title>
+                      {markedDates[selectedDateDetails] &&
+                      markedDates[selectedDateDetails].lectureDetails ? (
+                        // Display class details if the date is found in markedDates and lectureDetails is available
+                        <>
+                          <Paragraph>
+                            Start Time:{' '}
+                            {
+                              markedDates[selectedDateDetails].lectureDetails
+                                .starttime
+                            }
+                          </Paragraph>
+                          <Paragraph>
+                            End Time:{' '}
+                            {
+                              markedDates[selectedDateDetails].lectureDetails
+                                .endtime
+                            }
+                          </Paragraph>
+                          <Paragraph>
+                            Teacher:{' '}
+                            {
+                              markedDates[selectedDateDetails].lectureDetails
+                                .teachername
+                            }
+                          </Paragraph>
+                          <Paragraph>
+                            Subject:{' '}
+                            {
+                              markedDates[selectedDateDetails].lectureDetails
+                                .subject
+                            }
+                          </Paragraph>
+                          <Paragraph>
+                            Grade:{' '}
+                            {
+                              markedDates[selectedDateDetails].lectureDetails
+                                .grade
+                            }
+                          </Paragraph>
+                          <Paragraph>
+                            Classroom:{' '}
+                            {
+                              markedDates[selectedDateDetails].lectureDetails
+                                .classroom_name
+                            }
+                          </Paragraph>
+                        </>
+                      ) : (
+                        // Display a message if no matching date or lecture details are found
+                        <Paragraph>No class on this date.</Paragraph>
+                      )}
+                    </Card.Content>
+                  </Card>
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        </ImageBackground>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  contentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  calendar: {
+    borderWidth: 1,
+    borderRadius: 8,
+    margin: 0.03 * Dimensions.get('window').width,
+    borderColor: 'gray',
+    height: 0.45 * Dimensions.get('window').height,
+    width: 0.8 * Dimensions.get('window').width,
+  },
+  cardContainer: {
+    marginTop: 0.05 * Dimensions.get('window').height,
+    marginBottom: 0.01 * Dimensions.get('window').height,
+    alignItems: 'center',
+  },
+  card: {
+    width: 0.8 * Dimensions.get('window').width,
+  },
+});
 
 export default DashboardScreen;

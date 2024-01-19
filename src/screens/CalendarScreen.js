@@ -8,11 +8,15 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  ImageBackground, // Import ImageBackground component
+  ActivityIndicator, // Import ActivityIndicator component
+  Dimensions,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
-import {Card, Title, Paragraph} from 'react-native-paper'; // Import Card components
+import {Card, Title, Paragraph} from 'react-native-paper';
 import Header from '../components/Header';
 import Storage from '../utils/Storage';
+import {BACKGROUND} from '../utils/Imagepath';
 
 const CalendarScreen = ({navigation}) => {
   const [markedDates, setMarkedDates] = useState({});
@@ -20,6 +24,9 @@ const CalendarScreen = ({navigation}) => {
   const [selectedTitle, setSelectedTitle] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [apiResponse, setApiResponse] = useState(null);
+  const [loading, setLoading] = useState(true); // State to manage loading
+
+  const {width, height} = Dimensions.get('window');
 
   useEffect(() => {
     fetchDates();
@@ -27,6 +34,8 @@ const CalendarScreen = ({navigation}) => {
 
   const fetchDates = async () => {
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       // Retrieve access token from AsyncStorage
       const storedAccessToken = await Storage.getAccessToken();
 
@@ -60,12 +69,17 @@ const CalendarScreen = ({navigation}) => {
       // Process API response to mark dates
       const markedDatesData = {};
       apiResponseData.data.forEach(holiday => {
-        markedDatesData[holiday.start_date] = {marked: true, dotColor: 'red'};
+        markedDatesData[holiday.start_date] = {
+          marked: true,
+          dotColor: 'green',
+        };
       });
 
       setMarkedDates(markedDatesData);
     } catch (error) {
       console.error('Error fetching holidays:', error.message);
+    } finally {
+      setLoading(false); // Set loading to false after API call is complete
     }
   };
 
@@ -103,56 +117,74 @@ const CalendarScreen = ({navigation}) => {
       <SafeAreaView style={{flex: 1}}>
         <StatusBar backgroundColor="transparent" barStyle="light-content" />
 
-        <Header title="Calendar" onPress={() => navigation.openDrawer()} />
+        <ImageBackground
+          source={BACKGROUND}
+          style={{flex: 1, resizeMode: 'cover'}}>
+          <Header title="Calendar" onPress={() => navigation.openDrawer()} />
 
-        <ScrollView>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Calendar
+          <ScrollView>
+            <View
               style={{
-                borderWidth: 1,
-                margin: 50,
-                borderColor: 'gray',
-                height: 350,
-                width: 350,
-              }}
-              theme={{
-                backgroundColor: '#ffffff',
-                calendarBackground: '#ffffff',
-                textSectionTitleColor: '#b6c1cd',
-                selectedDayBackgroundColor: '#00adf5',
-                selectedDayTextColor: '#ffffff',
-                todayTextColor: '#00adf5',
-                dayTextColor: '#2d4150',
-                textDisabledColor: '#d9e',
-              }}
-              markedDates={markedDates}
-              onDayPress={handleDayPress}
-            />
-
-            {selectedDate && (
-              <View
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Calendar
                 style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Card style={{marginTop: 10, width: 350, marginBottom: 10}}>
-                  <Card.Content>
-                    <Title>{selectedDate}</Title>
-                    <Paragraph>{selectedTitle}</Paragraph>
-                  </Card.Content>
-                </Card>
-              </View>
-            )}
-          </View>
-        </ScrollView>
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  margin: 0.03 * width,
+                  borderColor: 'gray',
+                  height: 0.45 * height,
+                  width: 0.8 * width,
+                }}
+                theme={{
+                  backgroundColor: 'transparent', // Set background color to transparent
+                  calendarBackground: 'white', // Set calendar background color to transparent
+                  textSectionTitleColor: '#b6c1cd',
+                  selectedDayBackgroundColor: '#00adf5',
+                  selectedDayTextColor: '#ffffff',
+                  todayTextColor: '#00adf5',
+                  dayTextColor: '#2d4150',
+                  textDisabledColor: '#d9e',
+                }}
+                markedDates={markedDates}
+                onDayPress={handleDayPress}
+              />
+
+              {selectedDate && (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Card
+                    style={{
+                      marginTop: 10,
+                      width: 0.8 * width,
+                      marginBottom: 10,
+                    }}>
+                    <Card.Content>
+                      <Title>{selectedDate}</Title>
+                      <Paragraph>{selectedTitle}</Paragraph>
+                    </Card.Content>
+                  </Card>
+                </View>
+              )}
+
+              {loading && (
+                <ActivityIndicator
+                  style={{marginTop: 20}}
+                  size="large"
+                  color="#a347ff"
+                />
+              )}
+            </View>
+          </ScrollView>
+        </ImageBackground>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
