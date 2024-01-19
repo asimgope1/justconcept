@@ -16,7 +16,7 @@ const CustomDrawerContent = ({navigation}) => {
           style={{
             fontWeight: 'bold',
             fontSize: 20,
-            color: 'black',
+            color: 'white',
           }}>
           Dashboard
         </Text>
@@ -28,7 +28,7 @@ const CustomDrawerContent = ({navigation}) => {
           style={{
             fontWeight: 'bold',
             fontSize: 20,
-            color: 'black',
+            color: 'white',
           }}>
           Assignment
         </Text>
@@ -40,7 +40,7 @@ const CustomDrawerContent = ({navigation}) => {
           style={{
             fontWeight: 'bold',
             fontSize: 20,
-            color: 'black',
+            color: 'white',
           }}>
           Timetable
         </Text>
@@ -52,7 +52,7 @@ const CustomDrawerContent = ({navigation}) => {
           style={{
             fontWeight: 'bold',
             fontSize: 20,
-            color: 'black',
+            color: 'white',
           }}>
           Holiday
         </Text>
@@ -65,9 +65,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: 'black',
   },
   item: {
-    color: 'black',
+    color: 'white',
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import Storage from '../utils/Storage';
 import {LOGO} from '../utils/Imagepath';
@@ -16,24 +18,52 @@ import {LOGO} from '../utils/Imagepath';
 const LoginScreen = ({onLogin, onLogout}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const activityIndicatorRef = useRef(null);
 
   const handleLogin = async () => {
     try {
-      // Your login logic here
+      setLoading(true);
 
-      const result = 'login success'; // Replace with your actual login response
+      const requestBody = {
+        email: email,
+        password: password,
+      };
 
-      // Store the login response and authenticated status in AsyncStorage
-      await Storage.setLoginResponse(result);
-      await Storage.setAuthenticatedStatus(true);
+      const myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
 
-      // Check the result or handle it as needed
+      const response = await fetch(
+        'https://justconcepts.in/app/justconceptapi/public/api/login',
+        {
+          method: 'POST',
+          headers: myHeaders,
+          body: JSON.stringify(requestBody),
+          redirect: 'follow',
+        },
+      );
+
+      const result = await response.json();
+
       console.log(result);
 
-      // Assuming successful login, you can call onLogin to update authentication status
-      onLogin();
+      // Check if the response has a success message
+      if (result.message === 'Success') {
+        // Store the login response and authenticated status in AsyncStorage
+        await Storage.setLoginResponse(result);
+        await Storage.setAuthenticatedStatus(true);
+
+        // Assuming successful login, you can call onLogin to update authentication status
+        onLogin();
+      } else {
+        console.error('Login failed:', result.message);
+        // Handle unsuccessful login here if needed
+      }
     } catch (error) {
       console.error('Error during login:', error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,57 +74,62 @@ const LoginScreen = ({onLogin, onLogout}) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Image
-        source={LOGO}
-        style={{
-          width: 200,
-          height: 200,
-          resizeMode: 'contain',
-          marginBottom: 20,
-        }}
-      />
-      <View style={styles.textContainer}>
-        <Text style={styles.boldText}>Hello! let's get started</Text>
-        <Text style={styles.regularText}>Sign in to continue.</Text>
-      </View>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="grey"
-        keyboardType="email-address"
-        onChangeText={text => setEmail(text)}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="grey"
-        secureTextEntry
-        onChangeText={text => setPassword(text)}
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>SignIn</Text>
-      </TouchableOpacity>
-      <View
-        style={{
-          width: '100%',
-          alignItems: 'flex-start',
-        }}>
-        <Text
+    <ScrollView contentContainerStyle={styles.container}>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <Image
+          source={LOGO}
           style={{
-            fontSize: 14,
+            width: 200,
+            height: 200,
+            resizeMode: 'contain',
             marginBottom: 20,
-            color: 'black',
-          }}>
-          Forgot Password ?
-        </Text>
-      </View>
-    </KeyboardAvoidingView>
+          }}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.boldText}>Hello! let's get started</Text>
+          <Text style={styles.regularText}>Sign in to continue.</Text>
+        </View>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="grey"
+          keyboardType="email-address"
+          onChangeText={text => setEmail(text)}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="grey"
+          secureTextEntry
+          onChangeText={text => setPassword(text)}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>SignIn</Text>
+        </TouchableOpacity>
+
+        {loading && (
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator size="large" color="#a347ff" />
+          </View>
+        )}
+
+        <View style={{width: '100%', alignItems: 'flex-start'}}>
+          <Text
+            style={{
+              fontSize: 14,
+              marginBottom: 20,
+              color: 'black',
+            }}>
+            Forgot Password ?
+          </Text>
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -141,6 +176,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     textAlign: 'center',
+  },
+  activityIndicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
 });
 

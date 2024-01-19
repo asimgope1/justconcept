@@ -9,18 +9,22 @@ const STORAGE_KEYS = {
 const Storage = {
   setLoginResponse: async response => {
     try {
-      await AsyncStorage.setItem(STORAGE_KEYS.LOGIN_RESPONSE, response);
+      const responseString = JSON.stringify(response);
+      await AsyncStorage.setItem(STORAGE_KEYS.LOGIN_RESPONSE, responseString);
     } catch (error) {
       console.error('Error setting login response in AsyncStorage:', error);
     }
   },
 
-  getLoginResponse: async () => {
+  getAccessToken: async () => {
     try {
-      const response = await AsyncStorage.getItem(STORAGE_KEYS.LOGIN_RESPONSE);
-      return response;
+      const responseString = await AsyncStorage.getItem(
+        STORAGE_KEYS.LOGIN_RESPONSE,
+      );
+      const loginResponse = responseString ? JSON.parse(responseString) : null;
+      return loginResponse ? loginResponse.data.access_token : null;
     } catch (error) {
-      console.error('Error getting login response from AsyncStorage:', error);
+      console.error('Error getting access token from AsyncStorage:', error);
       return null;
     }
   },
