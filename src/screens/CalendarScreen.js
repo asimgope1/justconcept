@@ -120,78 +120,78 @@ const CalendarScreen = ({navigation}) => {
     <TouchableWithoutFeedback onPress={handleScreenTap}>
       <SafeAreaView style={{flex: 1}}>
         <StatusBar backgroundColor="transparent" barStyle="light-content" />
-        <ImageBackground
+        {/* <ImageBackground
           source={DASHBACK}
-          style={{flex: 1, resizeMode: 'cover'}}>
-          <Header title="Calendar" onPress={() => navigation.openDrawer()} />
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }>
-            <View
+          style={{flex: 1, resizeMode: 'cover'}}> */}
+        <Header title="Calendar" onPress={() => navigation.openDrawer()} />
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Calendar
               style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Calendar
+                borderWidth: 1,
+                borderRadius: 8,
+                margin: 0.05 * width,
+                marginTop: 0.08 * Dimensions.get('window').width,
+                borderColor: 'gray',
+                height: 0.5 * height,
+                width: 0.8 * width,
+              }}
+              theme={{
+                backgroundColor: 'transparent',
+                calendarBackground: 'white',
+                textSectionTitleColor: '#b6c1cd',
+                selectedDayBackgroundColor: '#00adf5',
+                selectedDayTextColor: '#ffffff',
+                todayTextColor: '#00adf5',
+                dayTextColor: '#2d4150',
+                textDisabledColor: '#d9e',
+              }}
+              markedDates={markedDates}
+              onDayPress={handleDayPress}
+              current={getTodayDate()} // Set the initial date
+            />
+
+            {selectedDate && (
+              <View
                 style={{
-                  borderWidth: 1,
-                  borderRadius: 8,
-                  margin: 0.05 * width,
-                  marginTop: 0.08 * Dimensions.get('window').width,
-                  borderColor: 'gray',
-                  height: 0.5 * height,
-                  width: 0.8 * width,
-                }}
-                theme={{
-                  backgroundColor: 'transparent',
-                  calendarBackground: 'white',
-                  textSectionTitleColor: '#b6c1cd',
-                  selectedDayBackgroundColor: '#00adf5',
-                  selectedDayTextColor: '#ffffff',
-                  todayTextColor: '#00adf5',
-                  dayTextColor: '#2d4150',
-                  textDisabledColor: '#d9e',
-                }}
-                markedDates={markedDates}
-                onDayPress={handleDayPress}
-                current={getTodayDate()} // Set the initial date
-              />
-
-              {selectedDate && (
-                <View
+                  flex: 1,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Card
                   style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    marginTop: 10,
+                    width: 0.8 * width,
+                    marginBottom: 10,
                   }}>
-                  <Card
-                    style={{
-                      marginTop: 10,
-                      width: 0.8 * width,
-                      marginBottom: 10,
-                    }}>
-                    <Card.Content>
-                      <Title>{selectedDate}</Title>
-                      <Paragraph>{selectedTitle}</Paragraph>
-                    </Card.Content>
-                  </Card>
-                </View>
-              )}
+                  <Card.Content>
+                    <Title>{selectedDate}</Title>
+                    <Paragraph>{selectedTitle}</Paragraph>
+                  </Card.Content>
+                </Card>
+              </View>
+            )}
 
-              {loading && (
-                <ActivityIndicator
-                  style={{marginTop: 20}}
-                  size="large"
-                  color="#a347ff"
-                />
-              )}
-            </View>
-          </ScrollView>
-        </ImageBackground>
+            {loading && (
+              <ActivityIndicator
+                style={{marginTop: 20}}
+                size="large"
+                color="#a347ff"
+              />
+            )}
+          </View>
+        </ScrollView>
+        {/* </ImageBackground> */}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

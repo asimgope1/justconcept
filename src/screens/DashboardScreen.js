@@ -64,8 +64,8 @@ const DashboardScreen = ({navigation}) => {
         setAllDates(dates);
 
         const subjectDotColorMap = {
-          Chem: 'red',
-          Bio: 'red',
+          Chem: 'purple',
+          Bio: 'green',
           Science: 'red',
         };
 
@@ -82,6 +82,7 @@ const DashboardScreen = ({navigation}) => {
             selected: true,
             marked: true,
             dotColor,
+            selectedColor: dotColor,
             lectureDetails: lecture,
           };
         });
@@ -143,94 +144,94 @@ const DashboardScreen = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor="transparent" barStyle="light-content" />
 
-        <ImageBackground source={DASHBACK} style={styles.backgroundImage}>
-          <Header title="Dashboard" onPress={() => navigation.openDrawer()} />
+        {/* <ImageBackground source={DASHBACK} style={styles.backgroundImage}> */}
+        <Header title="Dashboard" onPress={() => navigation.openDrawer()} />
 
-          <ScrollView contentContainerStyle={styles.contentContainer}>
-            <View>
-              {loading ? (
-                <ActivityIndicator size="large" color="#a347ff" />
-              ) : (
-                <Calendar
-                  style={styles.calendar}
-                  theme={{
-                    backgroundColor: 'transparent',
-                    calendarBackground: 'white',
-                    textSectionTitleColor: '#b6c1cd',
-                    selectedDayBackgroundColor: '#00adf5',
-                    selectedDayTextColor: '#ffffff',
-                    todayTextColor: '#00adf5',
-                    dayTextColor: '#2d4150',
-                    textDisabledColor: '#d9e',
-                  }}
-                  markedDates={markedDates}
-                  onDayPress={handleDayPress}
-                />
-              )}
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <View>
+            {loading ? (
+              <ActivityIndicator size="large" color="#a347ff" />
+            ) : (
+              <Calendar
+                style={styles.calendar}
+                theme={{
+                  backgroundColor: 'transparent',
+                  calendarBackground: 'white',
+                  textSectionTitleColor: '#b6c1cd',
+                  selectedDayBackgroundColor: '#00adf5',
+                  selectedDayTextColor: '#ffffff',
+                  todayTextColor: '#00adf5',
+                  dayTextColor: '#2d4150',
+                  textDisabledColor: '#d9e',
+                }}
+                markedDates={markedDates}
+                onDayPress={handleDayPress}
+              />
+            )}
 
-              {selectedDateDetails !== null && (
-                <View style={styles.cardContainer}>
-                  <Card style={styles.card}>
-                    <Card.Content>
-                      <Title>{selectedDateDetails}</Title>
-                      {markedDates[selectedDateDetails] &&
-                      markedDates[selectedDateDetails].lectureDetails ? (
-                        // Display class details if the date is found in markedDates and lectureDetails is available
-                        <>
-                          <Paragraph>
-                            Start Time:{' '}
-                            {
-                              markedDates[selectedDateDetails].lectureDetails
-                                .starttime
-                            }
-                          </Paragraph>
-                          <Paragraph>
-                            End Time:{' '}
-                            {
-                              markedDates[selectedDateDetails].lectureDetails
-                                .endtime
-                            }
-                          </Paragraph>
-                          <Paragraph>
-                            Teacher:{' '}
-                            {
-                              markedDates[selectedDateDetails].lectureDetails
-                                .teachername
-                            }
-                          </Paragraph>
-                          <Paragraph>
-                            Subject:{' '}
-                            {
-                              markedDates[selectedDateDetails].lectureDetails
-                                .subject
-                            }
-                          </Paragraph>
-                          <Paragraph>
-                            Grade:{' '}
-                            {
-                              markedDates[selectedDateDetails].lectureDetails
-                                .grade
-                            }
-                          </Paragraph>
-                          <Paragraph>
-                            Classroom:{' '}
-                            {
-                              markedDates[selectedDateDetails].lectureDetails
-                                .classroom_name
-                            }
-                          </Paragraph>
-                        </>
-                      ) : (
-                        // Display a message if no matching date or lecture details are found
-                        <Paragraph>No class on this date.</Paragraph>
-                      )}
-                    </Card.Content>
-                  </Card>
-                </View>
-              )}
-            </View>
-          </ScrollView>
-        </ImageBackground>
+            {selectedDateDetails !== null && (
+              <View style={styles.cardContainer}>
+                <Card style={styles.card}>
+                  <Card.Content>
+                    <Title>{selectedDateDetails}</Title>
+                    {markedDates[selectedDateDetails] &&
+                    markedDates[selectedDateDetails].lectureDetails ? (
+                      // Display class details if the date is found in markedDates and lectureDetails is available
+                      <>
+                        <Paragraph>
+                          Start Time:{' '}
+                          {
+                            markedDates[selectedDateDetails].lectureDetails
+                              .starttime
+                          }
+                        </Paragraph>
+                        <Paragraph>
+                          End Time:{' '}
+                          {
+                            markedDates[selectedDateDetails].lectureDetails
+                              .endtime
+                          }
+                        </Paragraph>
+                        <Paragraph>
+                          Teacher:{' '}
+                          {
+                            markedDates[selectedDateDetails].lectureDetails
+                              .teachername
+                          }
+                        </Paragraph>
+                        <Paragraph>
+                          Subject:{' '}
+                          {
+                            markedDates[selectedDateDetails].lectureDetails
+                              .subject
+                          }
+                        </Paragraph>
+                        <Paragraph>
+                          Grade:{' '}
+                          {
+                            markedDates[selectedDateDetails].lectureDetails
+                              .grade
+                          }
+                        </Paragraph>
+                        <Paragraph>
+                          Classroom:{' '}
+                          {
+                            markedDates[selectedDateDetails].lectureDetails
+                              .classroom_name
+                          }
+                        </Paragraph>
+                      </>
+                    ) : (
+                      // Display a message if no matching date or lecture details are found
+                      <Paragraph>No class on this date.</Paragraph>
+                    )}
+                  </Card.Content>
+                </Card>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+        {/* </ImageBackground> */}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

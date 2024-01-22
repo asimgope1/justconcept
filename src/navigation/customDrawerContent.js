@@ -22,10 +22,10 @@ import {
 import {useIsFocused} from '@react-navigation/native';
 
 const menuItems = [
-  {screen: 'Dashboard', label: 'Dashboard', image: DASHBOARD},
-  {screen: 'Student', label: 'Assignment', image: STUDENT},
-  {screen: 'Timetable', label: 'Timetable', image: TIMETABLE},
-  {screen: 'Calendar', label: 'Holiday', image: HOLIDAY},
+  {screen: 'Dashboard', label: 'Dashboard', image: DASHBOARD, key: 1},
+  {screen: 'Student', label: 'Assignment', image: STUDENT, key: 2},
+  {screen: 'Dashboard', label: 'Timetable', image: TIMETABLE, key: 3},
+  {screen: 'Calendar', label: 'Holiday', image: HOLIDAY, key: 4},
 ];
 
 const CustomDrawerContent = ({navigation}) => {
@@ -117,7 +117,7 @@ const CustomDrawerContent = ({navigation}) => {
       </View>
       <FlatList
         data={menuItems}
-        keyExtractor={item => item.screen}
+        keyExtractor={item => item.key}
         renderItem={renderItem}
       />
     </View>
