@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {
@@ -17,7 +18,7 @@ import {Calendar} from 'react-native-calendars';
 import {Card, Title, Paragraph} from 'react-native-paper';
 import Header from '../components/Header';
 import Storage from '../utils/Storage';
-import {BACKGROUND} from '../utils/Imagepath';
+import {DASHBACK} from '../utils/Imagepath';
 
 const CalendarScreen = ({navigation}) => {
   const [markedDates, setMarkedDates] = useState({});
@@ -119,12 +120,10 @@ const CalendarScreen = ({navigation}) => {
     <TouchableWithoutFeedback onPress={handleScreenTap}>
       <SafeAreaView style={{flex: 1}}>
         <StatusBar backgroundColor="transparent" barStyle="light-content" />
-
         <ImageBackground
-          source={BACKGROUND}
+          source={DASHBACK}
           style={{flex: 1, resizeMode: 'cover'}}>
           <Header title="Calendar" onPress={() => navigation.openDrawer()} />
-
           <ScrollView
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -141,9 +140,9 @@ const CalendarScreen = ({navigation}) => {
                   borderWidth: 1,
                   borderRadius: 8,
                   margin: 0.05 * width,
-                  marginTop: 0.15 * width,
+                  marginTop: 0.08 * Dimensions.get('window').width,
                   borderColor: 'gray',
-                  height: 0.45 * height,
+                  height: 0.5 * height,
                   width: 0.8 * width,
                 }}
                 theme={{

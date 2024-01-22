@@ -2,7 +2,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {MENU} from '../utils/Imagepath';
+import {MENU, MENULEFT} from '../utils/Imagepath';
 
 const Header = ({title, onPress}) => {
   return (
@@ -16,15 +16,25 @@ const Header = ({title, onPress}) => {
         alignItems: 'center',
         paddingHorizontal: 15,
         height: 60,
+        zIndex: 3,
       }}>
-      <Text
+      {/* <Text
         style={{
           fontWeight: 'bold',
           fontSize: 20,
           color: 'white',
         }}>
         {title}
-      </Text>
+      </Text> */}
+
+      <Image
+        source={MENULEFT}
+        style={{
+          height: 30,
+          width: 30,
+          resizeMode: 'contain',
+        }}
+      />
       <TouchableOpacity
         style={{
           height: 40,

@@ -85,7 +85,7 @@ const DashboardScreen = ({navigation}) => {
             lectureDetails: lecture,
           };
         });
-
+        console.log(markedDatesData);
         setMarkedDates(markedDatesData);
       } else {
         console.error('Data not available or empty array.');
@@ -108,8 +108,34 @@ const DashboardScreen = ({navigation}) => {
     const selectedDateDetail = allDates.find(
       selectedDate => selectedDate === date.dateString,
     );
+    const arrayOfObj = Object.entries(markedDates).map(e => ({[e[0]]: e[1]}));
+    const transformedArray = arrayOfObj.map(obj => {
+      const dateKey = Object.keys(obj)[0]; // Extracting the date key
+      const newObj = {date: dateKey, ...obj[dateKey]};
+      return newObj;
+    });
 
-    setSelectedDateDetails(selectedDateDetail);
+    // console.log(transformedArray);
+
+    const foundData = transformedArray.filter((element, index) => {
+      return element.date == selectedDateDetail;
+    });
+
+    console.log(foundData);
+    if (foundData.length > 0) {
+      navigation.navigate('Lecture', {data: foundData});
+    }
+    // const allKeys = arrayOfObj.map(entry => Object.keys(entry)[0]);
+    // if (allKeys.includes(selectedDateDetail)) {
+    //   console.log('hello');
+    //   //   navigation.navigate('Lecture', {data: arrayOfObj});
+    //   console.log(arrayOfObj);
+    // }
+
+    // console.log(Object.entries(markedDates));
+    // console.log(selectedDateDetail);
+    // setSelectedDateDetails(selectedDateDetail);
+    // navigation.navigate('Lecture', {data: });
   };
 
   return (
@@ -226,8 +252,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     margin: 0.03 * Dimensions.get('window').width,
+    marginTop: 0.08 * Dimensions.get('window').width,
     borderColor: 'gray',
-    height: 0.45 * Dimensions.get('window').height,
+    height: 0.5 * Dimensions.get('window').height,
     width: 0.8 * Dimensions.get('window').width,
   },
   cardContainer: {

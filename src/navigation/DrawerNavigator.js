@@ -7,6 +7,7 @@ import StudentScreen from '../screens/StudentScreen';
 import TimetableScreen from '../screens/TimetableScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import LoginScreen from '../screens/LoginScreens';
+import Lecture from '../screens/Lecture';
 
 const Drawer = createDrawerNavigator();
 
@@ -14,8 +15,8 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator
       initialRouteName="Dashboard"
-      drawerContent={props => <CustomDrawerContent {...props} />}
-      drawerPosition="right">
+      screenOptions={{drawerPosition: 'right'}}
+      drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen
         name="Dashboard"
         component={DashboardScreen}
@@ -39,6 +40,11 @@ const DrawerNavigator = () => {
       <Drawer.Screen
         name="LogOut"
         component={LoginScreen}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="Lecture"
+        component={Lecture}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {useState, useEffect} from 'react';
 import {
@@ -7,18 +8,29 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  Dimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LOGO} from '../utils/Imagepath';
+import {
+  DASHBOARD,
+  HOLIDAY,
+  LOGO,
+  MENU,
+  STUDENT,
+  TIMETABLE,
+} from '../utils/Imagepath';
+import {useIsFocused} from '@react-navigation/native';
 
 const menuItems = [
-  {screen: 'Dashboard', label: 'Dashboard'},
-  {screen: 'Student', label: 'Assignment'},
-  {screen: 'Timetable', label: 'Timetable'},
-  {screen: 'Calendar', label: 'Holiday'},
+  {screen: 'Dashboard', label: 'Dashboard', image: DASHBOARD},
+  {screen: 'Student', label: 'Assignment', image: STUDENT},
+  {screen: 'Timetable', label: 'Timetable', image: TIMETABLE},
+  {screen: 'Calendar', label: 'Holiday', image: HOLIDAY},
 ];
 
 const CustomDrawerContent = ({navigation}) => {
+  console.log(navigation);
+  console.log('');
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
@@ -47,7 +59,23 @@ const CustomDrawerContent = ({navigation}) => {
     <TouchableOpacity
       style={styles.item}
       onPress={navigateToScreen(item.screen)}>
-      <Text style={styles.itemText}>{item.label}</Text>
+      <View>
+        <Image
+          source={item.image}
+          style={{
+            width: 30,
+            height: 30,
+            resizeMode: 'contain',
+            tintColor: 'white',
+          }}
+        />
+      </View>
+      <View
+        style={{
+          paddingLeft: 35,
+        }}>
+        <Text style={styles.itemText}>{item.label}</Text>
+      </View>
     </TouchableOpacity>
   );
 
@@ -55,23 +83,38 @@ const CustomDrawerContent = ({navigation}) => {
     <View style={styles.container}>
       <View
         style={{
-          height: 250,
+          height: 60,
+          zIndex: -1,
+          //   backgroundColor: 'red',
+        }}
+      />
+      <View
+        style={{
           alignSelf: 'center',
+          flexDirection: 'row',
+          width: '100%',
+          height: Dimensions.get('window').height * 0.12,
+          alignItems: 'center',
+          //   justifyContent: 'center',
         }}>
         <Image
           source={LOGO}
           style={{
-            width: 150,
-            height: 150,
-            resizeMode: 'cover',
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            resizeMode: 'contain',
             alignSelf: 'center',
-            marginBottom: 20,
           }}
         />
-        <Text style={styles.welcomeText}>Welcome</Text>
-        <Text style={styles.Email}> {userEmail}</Text>
+        <View
+          style={{
+            paddingLeft: 10,
+          }}>
+          <Text style={styles.Email}> {userEmail}</Text>
+          <Text style={styles.Email}> Student</Text>
+        </View>
       </View>
-
       <FlatList
         data={menuItems}
         keyExtractor={item => item.screen}
@@ -84,8 +127,8 @@ const CustomDrawerContent = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: 'black',
+    paddingLeft: Dimensions.get('window').width * 0.08,
+    backgroundColor: '#242121',
   },
   welcomeText: {
     color: 'white',
@@ -99,9 +142,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   item: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
+    height: Dimensions.get('window').height * 0.08,
+    // backgroundColor: 'red',
     borderBottomColor: '#ccc',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 10,
   },
   itemText: {
     fontWeight: 'bold',

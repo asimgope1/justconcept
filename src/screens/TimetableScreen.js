@@ -7,9 +7,7 @@ const TimetableScreen = ({navigation}) => {
   return (
     <SafeAreaView>
       <StatusBar backgroundColor="transparent" barStyle="light-content" />
-
       <Header title="Timetable" onPress={() => navigation.openDrawer()} />
-
       <View
         style={{
           flex: 1,
