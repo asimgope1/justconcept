@@ -8,3 +8,4 @@ export const STUDENT = require('../assets/img/student.png');
 export const HOLIDAY = require('../assets/img/holiday.png');
 export const TIMETABLE = require('../assets/img/timetable.png');
 export const VERIFIED = require('../assets/img/verified.png');
+export const IICON = require('../assets/img/I_icon.png');

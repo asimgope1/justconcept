@@ -1,28 +1,76 @@
 /* eslint-disable prettier/prettier */
-import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import Storage from '../utils/Storage';
+import React, {useEffect} from 'react';
 import Header from '../components/Header';
 
 const Lecture = ({route, navigation}) => {
-  const {date} = route.params.data[0];
-  const {
-    classroom,
-    classroom_name,
-    grade,
-    teachername,
-    subject,
-    starttime,
-    classroomTitle,
-    endtime,
-    weekdays,
-    fileUpload,
-    repeat,
-  } = route.params.data[0].lectureDetails;
+  const id = route.params.id;
+
+  const [result, setResult] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  // const {
+  //   classroom,
+  //   classroom_name,
+  //   grade,
+  //   teachername,
+  //   subject,
+  //   starttime,
+  //   classroomTitle,
+  //   endtime,
+  //   weekdays,
+  //   fileUpload,
+  //   repeat,
+  // } = route.params.data[0].lectureDetails;
+  // console.log('inside', id);
+  useEffect(() => {
+    const fetchDates = async () => {
+      try {
+        const storedAccessToken = await Storage.getAccessToken();
+
+        if (!storedAccessToken) {
+          console.error('Access token not found in AsyncStorage');
+          return;
+        }
+        setLoading(true);
+
+        const response = await fetch(
+          'https://justconcepts.in/app/justconceptapi/public/api/lectureinfo/' +
+            id,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${storedAccessToken}`,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          console.error('Failed to fetch lectures:', response.status);
+          return;
+        }
+
+        const result = await response.json();
+
+        if (result.data) {
+          setResult(result.data);
+        } else {
+          console.error('Data not available or empty array.');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDates();
+  }, [id]);
 
   return (
     <View
       style={{
         flex: 1,
+        backgroundColor: 'white',
       }}>
       <Header onPress={() => navigation.openDrawer()} />
       {/* <View
@@ -314,44 +362,54 @@ const Lecture = ({route, navigation}) => {
           Lecture Details
         </Text>
       </View>
-      <View style={styles.table}>
-        <View style={styles.row}>
-          <Text style={styles.title}>Teacher</Text>
-          <Text style={styles.cell}>{teachername}</Text>
-          <Text style={styles.title}>Grade</Text>
-          <Text style={styles.cell}>{grade}</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="#a347ff" />
+      ) : (
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <Text style={styles.title}>Teacher</Text>
+            <Text style={styles.cell}>{result?.teachername}</Text>
+            <Text style={styles.title}>Grade</Text>
+            <Text style={styles.cell}>{result.grade}</Text>
+          </View>
+          <View style={styles.row2}>
+            <Text style={styles.title}>Subject</Text>
+            <Text style={styles.cell}>{result?.subject}</Text>
+            <Text style={styles.title}>Date</Text>
+            <Text style={styles.cell}>{result.date}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.title}>Time</Text>
+            <Text style={styles.cell}>
+              {result.starttime + '-' + result.endtime}
+            </Text>
+            <Text style={styles.title}>Classroom</Text>
+            <Text style={styles.cell}>{result.classroom_name}</Text>
+          </View>
+          <View style={styles.row2}>
+            <Text style={styles.title}>Repeat</Text>
+            <Text style={styles.cell}>
+              {result.repeat != '0' ? 'Yes' : 'No'}
+            </Text>
+            <Text style={styles.title}>Classroom Title</Text>
+            <Text style={styles.cell}>{result.classroomTitle}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.title}>Weekdays</Text>
+            <Text style={styles.cell}>{result.weekdays}</Text>
+            <Text style={styles.title}>File Download</Text>
+            <Text style={styles.cell}>
+              {result.fileUpload ? result.fileUpload : 'No file'}
+            </Text>
+          </View>
+          {/* Add more rows as needed */}
         </View>
-        <View style={styles.row}>
-          <Text style={styles.title}>Subject</Text>
-          <Text style={styles.cell}>{subject}</Text>
-          <Text style={styles.title}>Date</Text>
-          <Text style={styles.cell}>{date}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.title}>Time</Text>
-          <Text style={styles.cell}>{starttime + '-' + endtime}</Text>
-          <Text style={styles.title}>Classroom</Text>
-          <Text style={styles.cell}>{classroom_name}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.title}>Repeat</Text>
-          <Text style={styles.cell}>{repeat != '0' ? 'Yes' : 'No'}</Text>
-          <Text style={styles.title}>Classroom Title</Text>
-          <Text style={styles.cell}>{classroomTitle}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.title}>Weekdays</Text>
-          <Text style={styles.cell}>{weekdays}</Text>
-          <Text style={styles.title}>File Download</Text>
-          <Text style={styles.cell}>{fileUpload ? fileUpload : 'No file'}</Text>
-        </View>
-        {/* Add more rows as needed */}
-      </View>
+      )}
     </View>
   );
 };
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff'},
+  container: {flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#f2edf3'},
   head: {height: 40, backgroundColor: '#000000'},
   text: {margin: 6, color: 'red'},
   table: {
@@ -361,6 +419,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2EDF3',
+  },
+  row2: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -384,6 +448,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     //make it bold
+    borderRightWidth: 1,
+    borderColor: '#ebedf2',
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 12,

@@ -24,13 +24,13 @@ import {useIsFocused} from '@react-navigation/native';
 const menuItems = [
   {screen: 'Dashboard', label: 'Dashboard', image: DASHBOARD, key: 1},
   {screen: 'Student', label: 'Assignment', image: STUDENT, key: 2},
-  {screen: 'Dashboard', label: 'Timetable', image: TIMETABLE, key: 3},
+  {screen: 'Timetable', label: 'Timetable', image: TIMETABLE, key: 3},
   {screen: 'Calendar', label: 'Holiday', image: HOLIDAY, key: 4},
 ];
 
 const CustomDrawerContent = ({navigation}) => {
-  console.log(navigation);
-  console.log('');
+  // console.log(navigation);
+  // console.log('');
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
