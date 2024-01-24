@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
   Image,
+  BackHandler,
 } from 'react-native';
 import Storage from '../utils/Storage';
 import React, {useEffect} from 'react';
@@ -42,6 +43,33 @@ const StudentEdit = ({route, navigation}) => {
     },
     // Add more data as needed
   ];
+
+  useEffect(() => {
+    console.log('object', navigation.navigate);
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        // Handle the back press (navigate to the previous screen)
+        navigation.navigate('Dashboard', 94);
+        return true; // Prevent default behavior (exiting the app)
+      },
+    );
+
+    const fetchStudent = async () => {
+      try {
+        // ... (Your existing code for fetching data)
+      } catch (error) {
+        console.error('Fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudent();
+
+    // Cleanup the event listener on component unmount
+    return () => backHandler.remove();
+  }, [navigation, id]);
 
   const handleViewPress = id => {
     // console.log(date);
@@ -134,7 +162,7 @@ const StudentEdit = ({route, navigation}) => {
       }
 
       navigation.navigate('Student', {
-        id: 94, // Change this to the correct ID
+        id: id, // Change this to the correct ID
       });
     } catch (error) {
       console.error('Fetch error:', error);

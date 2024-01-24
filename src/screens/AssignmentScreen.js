@@ -50,7 +50,7 @@ const Assignment = ({route, navigation}) => {
       'hardwareBackPress',
       () => {
         // Handle the back press (navigate to the previous screen)
-        navigation.navigate('Assignment', 94);
+        navigation.navigate('Student', 94);
         return true; // Prevent default behavior (exiting the app)
       },
     );
