@@ -9,3 +9,6 @@ export const HOLIDAY = require('../assets/img/holiday.png');
 export const TIMETABLE = require('../assets/img/timetable.png');
 export const VERIFIED = require('../assets/img/verified.png');
 export const IICON = require('../assets/img/I_icon.png');
+export const EYE = require('../assets/img/eye.png');
+export const VIEW = require('../assets/img/view.png');
+export const EDIT = require('../assets/img/edit.png');

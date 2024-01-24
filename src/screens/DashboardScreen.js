@@ -124,7 +124,7 @@ const DashboardScreen = ({navigation}) => {
               container: {
                 backgroundColor: 'green',
                 borderRadius: 0,
-                height: 80,
+                height: 0.1 * Dimensions.get('window').height,
                 width: 40,
               },
             },
@@ -166,40 +166,53 @@ const DashboardScreen = ({navigation}) => {
     return (
       <View
         style={{
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          // position: 'absolute',
-          // top: -30,
-          // left: -150,
+          alignItems: 'left',
+
+          marginLeft: -0.75 * Dimensions.get('window').width, //-250
+          // marginLeft: -250,
         }}>
-        <TouchableOpacity onPress={handleCustomButtonPress}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: 'black',
+              marginTop: 4,
+              marginLeft: -2,
+              width: 119,
+            }}>
+            {formattedDate}
+          </Text>
+
           <View
             style={{
               backgroundColor: '#2c3e50',
               // padding: 10,
-              height: 40,
-              width: 50,
+              height: 30,
+              marginRight: 2,
+              width: 47,
               borderRadius: 5,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>Today</Text>
+            <Text style={{color: 'white'}}>Month</Text>
           </View>
-        </TouchableOpacity>
-        <Text style={{fontSize: 20, color: 'black'}}>{formattedDate}</Text>
-        <View
-          style={{
-            backgroundColor: '#2c3e50',
-            // padding: 10,
-            height: 40,
-            width: 50,
-            borderRadius: 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text>Month</Text>
+          <TouchableOpacity onPress={handleCustomButtonPress}>
+            <View
+              style={{
+                backgroundColor: '#2c3e50',
+                // padding: 10,
+                height: 30,
+                width: 47,
+
+                borderRadius: 5,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: 'white'}}>Today</Text>
+            </View>
+          </TouchableOpacity>
         </View>
+
         {/* You can add more buttons or customize the layout as needed */}
       </View>
     );
@@ -264,7 +277,7 @@ const DashboardScreen = ({navigation}) => {
                       style={{
                         fontSize: 20,
                         color: 'black',
-                        fontWeight: 'bold',
+                        fontWeight: '500',
                         marginLeft: 5,
                       }}>
                       Dashboard
@@ -335,7 +348,7 @@ const DashboardScreen = ({navigation}) => {
                         flex: 1,
                         // padding: 10,
                         width: 40,
-                        height: 80,
+                        height: 0.1 * Dimensions.get('window').height,
                       },
                       emptyDayContainer: {
                         borderColor: '#DDDDDD',
@@ -372,13 +385,16 @@ const DashboardScreen = ({navigation}) => {
                           style={{
                             backgroundColor: '#2c3e50',
                             // padding: 10,
-                            height: 40,
-                            width: 50,
+                            height: 30,
+                            width: 45,
                             borderRadius: 5,
                             justifyContent: 'center',
                             alignItems: 'center',
+                            marginLeft: 0.58 * Dimensions.get('window').width, //150
                           }}>
-                          <Text style={{fontSize: 20}}>{'<'}</Text>
+                          <Text style={{fontSize: 20, color: 'white'}}>
+                            {'<'}
+                          </Text>
                         </View>
                         // </TouchableOpacity>
                       );
@@ -389,13 +405,16 @@ const DashboardScreen = ({navigation}) => {
                           style={{
                             backgroundColor: '#2c3e50',
                             // padding: 10,
-                            height: 40,
-                            width: 50,
+                            height: 30,
+                            width: 45,
                             borderRadius: 5,
                             justifyContent: 'center',
                             alignItems: 'center',
+                            marginLeft: -0.05 * Dimensions.get('window').width, //-50
                           }}>
-                          <Text style={{fontSize: 20}}>{'>'}</Text>
+                          <Text style={{fontSize: 20, color: 'white'}}>
+                            {'>'}
+                          </Text>
                         </View>
                       );
                     }
@@ -450,7 +469,7 @@ const DashboardScreen = ({navigation}) => {
                           style={{
                             // justifyContent: 'center',
                             alignItems: 'center',
-                            height: 80,
+                            height: 0.1 * Dimensions.get('window').height,
                             backgroundColor:
                               date.dateString ==
                               new Date().toLocaleDateString('en-CA')
@@ -468,6 +487,55 @@ const DashboardScreen = ({navigation}) => {
                   }}
                   onDayPress={handleDayPress}
                 />
+                <View
+                  style={{
+                    marginLeft: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                  }}>
+                  <View
+                    style={{
+                      width: 70,
+                      height: 20,
+
+                      backgroundColor: 'purple',
+                      borderRadius: 3,
+                      marginBottom: 2,
+                    }}>
+                    <Text style={{color: 'white'}}> Chemistry</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: 70,
+                      height: 20,
+                      marginBottom: 2,
+
+                      backgroundColor: 'green',
+                      borderRadius: 3,
+                    }}>
+                    <Text style={{color: 'white'}}> Biology</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: 70,
+                      height: 20,
+                      marginBottom: 2,
+                      backgroundColor: 'red',
+                      borderRadius: 3,
+                    }}>
+                    <Text style={{color: 'white'}}> Science</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: 70,
+                      height: 20,
+
+                      backgroundColor: 'yellow',
+                      borderRadius: 3,
+                    }}>
+                    <Text style={{color: 'black'}}> Physics</Text>
+                  </View>
+                </View>
               </View>
             )}
 
@@ -565,7 +633,7 @@ const styles = StyleSheet.create({
     margin: 0.03 * Dimensions.get('window').width,
     marginTop: 0.08 * Dimensions.get('window').width,
     borderColor: '#DDDDDD',
-    height: 0.71 * Dimensions.get('window').height,
+    height: 0.61 * Dimensions.get('window').height,
     width: 0.9 * Dimensions.get('window').width,
   },
   cardContainer: {
@@ -576,6 +644,7 @@ const styles = StyleSheet.create({
   card: {
     width: 0.8 * Dimensions.get('window').width,
   },
+  box: {},
 });
 
 export default DashboardScreen;

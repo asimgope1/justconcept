@@ -14,9 +14,11 @@ import Storage from '../utils/Storage';
 import React, {useEffect} from 'react';
 import Header from '../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import {DASHBOARD, EDIT, EYE, VIEW} from '../utils/Imagepath';
+import {DASHBOARD, EYE, VIEW} from '../utils/Imagepath';
 
-const Student = ({route, navigation}) => {
+const Assignment = ({route, navigation}) => {
+  const id = route.params.id;
+
   const [result, setResult] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const data = [
@@ -44,23 +46,19 @@ const Student = ({route, navigation}) => {
 
   const handleViewPress = id => {
     // console.log(date);
-    navigation.navigate('StudentDetails', {
+    navigation.navigate('AssignmentDetails', {
       // data: foundData,
       id: id,
     });
   };
-  const handleAssignmentPress = id => {
-    navigation.navigate('Assignment', {
+  const handleFinalPress = id => {
+    // console.log(date);
+    navigation.navigate('AssignmentFinal', {
       // data: foundData,
       id: id,
     });
   };
-  const handleEditPress = id => {
-    navigation.navigate('StudentEdit', {
-      // data: foundData,
-      id: id,
-    });
-  };
+
   useEffect(() => {
     const fetchStudent = async () => {
       try {
@@ -73,7 +71,8 @@ const Student = ({route, navigation}) => {
         setLoading(true);
 
         const response = await fetch(
-          'https://justconcepts.in/app/justconceptapi/public/api/studentList',
+          'https://justconcepts.in/app/justconceptapi/public/api/studentassignmentList/' +
+            id,
           {
             method: 'GET',
             headers: {
@@ -114,7 +113,7 @@ const Student = ({route, navigation}) => {
       <View style={{marginTop: 10, marginLeft: 10}}>
         <Text style={{fontWeight: 'bold', color: 'black', fontSize: 18}}>
           {' '}
-          Student List
+          Assignment List
         </Text>
       </View>
       {loading ? (
@@ -134,9 +133,10 @@ const Student = ({route, navigation}) => {
                       <View
                         style={{
                           // backgroundColor: '#a347ff',
-                          alignItems: 'center',
                           padding: 7,
                           borderRadius: 5,
+                          justifyContent: 'center',
+                          alignItems: 'center',
                         }}>
                         <Text style={{color: 'white'}}>Excel</Text>
                       </View>
@@ -153,11 +153,12 @@ const Student = ({route, navigation}) => {
                       <View
                         style={{
                           // backgroundColor: '#a347ff',
-                          alignItems: 'center',
                           padding: 7,
                           borderRadius: 5,
+                          justifyContent: 'center',
+                          alignItems: 'center',
                         }}>
-                        <Text style={{color: 'white'}}>PDF</Text>
+                        <Text style={{color: 'white'}}>Pdf</Text>
                       </View>
                     </LinearGradient>
                   </TouchableOpacity>
@@ -183,12 +184,12 @@ const Student = ({route, navigation}) => {
               <View style={styles.table}>
                 <View style={styles.tableHeader}>
                   <Text style={styles.headerCell}>Sr No</Text>
-                  <Text style={styles.headerCell}>Name</Text>
-                  <Text style={styles.headerCell}>School</Text>
-                  <Text style={styles.headerCell}>Grade and Section</Text>
-                  <Text style={styles.headerCell}>Enrollment No</Text>
-                  <Text style={styles.headerCell}>Board</Text>
-                  <Text style={styles.headerCell}>Mobile Number</Text>
+                  <Text style={styles.headerCell}>Title</Text>
+                  <Text style={styles.headerCell}>Subject</Text>
+                  <Text style={styles.headerCell}>Grade </Text>
+                  <Text style={styles.headerCell}>Start date</Text>
+                  <Text style={styles.headerCell}>Due date</Text>
+                  <Text style={styles.headerCell}>Total Marking</Text>
                   <Text style={styles.headerCell}>Action</Text>
                 </View>
 
@@ -196,12 +197,12 @@ const Student = ({route, navigation}) => {
                   result.map((item, index) => (
                     <View key={index} style={styles.tableRow}>
                       <Text style={styles.cell}>{index + 1}</Text>
-                      <Text style={styles.cell}>{item.name}</Text>
-                      <Text style={styles.cell}>{item.school}</Text>
-                      <Text style={styles.cell}>{item.grade_and_section}</Text>
-                      <Text style={styles.cell}>{item.grade_and_section}</Text>
-                      <Text style={styles.cell}>{item.board}</Text>
-                      <Text style={styles.cell}>{item.mobile_number}</Text>
+                      <Text style={styles.cell}>{item.title}</Text>
+                      <Text style={styles.cell}>{item.subject}</Text>
+                      <Text style={styles.cell}>{item.grade}</Text>
+                      <Text style={styles.cell}>{item.start_date}</Text>
+                      <Text style={styles.cell}>{item.due_date}</Text>
+                      <Text style={styles.cell}>{item.total_marking}</Text>
                       <View
                         style={[
                           styles.cell,
@@ -219,33 +220,20 @@ const Student = ({route, navigation}) => {
                               height: 20,
                               resizeMode: 'contain',
                               tintColor: '#007BFF',
-                              marginLeft: 5,
+                              marginLeft: 10,
                             }}
                           />
                         </TouchableOpacity>
                         <TouchableOpacity
-                          onPress={() => handleEditPress(item.id)}>
-                          <Image
-                            source={EDIT}
-                            style={{
-                              width: 20,
-                              height: 20,
-                              resizeMode: 'contain',
-                              tintColor: '#0F9D0F',
-                              marginLeft: 5,
-                            }}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => handleAssignmentPress(item.id)}>
+                          onPress={() => handleFinalPress(item.id)}>
                           <Image
                             source={VIEW}
                             style={{
                               width: 20,
                               height: 20,
                               resizeMode: 'contain',
-                              tintColor: '#0F9D0F',
-                              marginLeft: 5,
+                              tintColor: '#007BFF',
+                              marginLeft: 10,
                             }}
                           />
                         </TouchableOpacity>
@@ -325,4 +313,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Student;
+export default Assignment;

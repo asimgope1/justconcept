@@ -437,6 +437,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     textAlign: 'center',
+    borderRightWidth: 1,
+    borderColor: '#ebedf2',
     fontSize: 12,
     color: 'black',
     // borderColor: 'black',

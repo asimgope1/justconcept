@@ -14,9 +14,11 @@ import Storage from '../utils/Storage';
 import React, {useEffect} from 'react';
 import Header from '../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import {DASHBOARD, EDIT, EYE, VIEW} from '../utils/Imagepath';
+import {DASHBOARD} from '../utils/Imagepath';
 
-const Student = ({route, navigation}) => {
+const AssignmentFinal = ({route, navigation}) => {
+  const id = route.params.id;
+
   const [result, setResult] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const data = [
@@ -44,19 +46,7 @@ const Student = ({route, navigation}) => {
 
   const handleViewPress = id => {
     // console.log(date);
-    navigation.navigate('StudentDetails', {
-      // data: foundData,
-      id: id,
-    });
-  };
-  const handleAssignmentPress = id => {
-    navigation.navigate('Assignment', {
-      // data: foundData,
-      id: id,
-    });
-  };
-  const handleEditPress = id => {
-    navigation.navigate('StudentEdit', {
+    navigation.navigate('AssignmentDetails', {
       // data: foundData,
       id: id,
     });
@@ -73,7 +63,8 @@ const Student = ({route, navigation}) => {
         setLoading(true);
 
         const response = await fetch(
-          'https://justconcepts.in/app/justconceptapi/public/api/studentList',
+          'https://justconcepts.in/app/justconceptapi/public/api/stdassignmentstatus/' +
+            id,
           {
             method: 'GET',
             headers: {
@@ -114,13 +105,15 @@ const Student = ({route, navigation}) => {
       <View style={{marginTop: 10, marginLeft: 10}}>
         <Text style={{fontWeight: 'bold', color: 'black', fontSize: 18}}>
           {' '}
-          Student List
+          Assignment Status
         </Text>
       </View>
       {loading ? (
         <ActivityIndicator size="large" color="#a347ff" />
       ) : (
         <View>
+          <Text>Assignment Status</Text>
+
           <View style={styles.main}>
             <View style={styles.container}>
               <View>
@@ -134,122 +127,42 @@ const Student = ({route, navigation}) => {
                       <View
                         style={{
                           // backgroundColor: '#a347ff',
-                          alignItems: 'center',
                           padding: 7,
                           borderRadius: 5,
+                          justifyContent: 'center',
+                          alignItems: 'center',
                         }}>
-                        <Text style={{color: 'white'}}>Excel</Text>
+                        <Text style={{color: 'white'}}>Pdf</Text>
                       </View>
                     </LinearGradient>
                   </TouchableOpacity>
                 </View>
-                <View style={styles.buttons}>
-                  <TouchableOpacity>
-                    <LinearGradient
-                      colors={['#90caf9', '#047edf']}
-                      start={{x: 0, y: 0}}
-                      end={{x: 1, y: 0}}
-                      style={{borderRadius: 5}}>
-                      <View
-                        style={{
-                          // backgroundColor: '#a347ff',
-                          alignItems: 'center',
-                          padding: 7,
-                          borderRadius: 5,
-                        }}>
-                        <Text style={{color: 'white'}}>PDF</Text>
-                      </View>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginRight: -50,
-                }}>
-                <Text style={styles.black}> Search:</Text>
-              </View>
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Master Search"
-                  placeholderTextColor={'#555'}
-                />
               </View>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.table}>
                 <View style={styles.tableHeader}>
                   <Text style={styles.headerCell}>Sr No</Text>
-                  <Text style={styles.headerCell}>Name</Text>
-                  <Text style={styles.headerCell}>School</Text>
-                  <Text style={styles.headerCell}>Grade and Section</Text>
-                  <Text style={styles.headerCell}>Enrollment No</Text>
-                  <Text style={styles.headerCell}>Board</Text>
-                  <Text style={styles.headerCell}>Mobile Number</Text>
-                  <Text style={styles.headerCell}>Action</Text>
+                  <Text style={styles.headerCell}>Student Name</Text>
+
+                  <Text style={styles.headerCell}>Grade </Text>
+                  <Text style={styles.headerCell}>Submitted On</Text>
+                  <Text style={styles.headerCell}>Status</Text>
+                  <Text style={styles.headerCell}>Teacher Remark</Text>
+                  <Text style={styles.headerCell}>Marks Scored</Text>
                 </View>
 
                 {result.length > 0 &&
                   result.map((item, index) => (
                     <View key={index} style={styles.tableRow}>
                       <Text style={styles.cell}>{index + 1}</Text>
-                      <Text style={styles.cell}>{item.name}</Text>
-                      <Text style={styles.cell}>{item.school}</Text>
-                      <Text style={styles.cell}>{item.grade_and_section}</Text>
-                      <Text style={styles.cell}>{item.grade_and_section}</Text>
-                      <Text style={styles.cell}>{item.board}</Text>
-                      <Text style={styles.cell}>{item.mobile_number}</Text>
-                      <View
-                        style={[
-                          styles.cell,
-                          {
-                            flexDirection: 'row',
-                            marginLeft: 5,
-                          },
-                        ]}>
-                        <TouchableOpacity
-                          onPress={() => handleViewPress(item.id)}>
-                          <Image
-                            source={EYE}
-                            style={{
-                              width: 20,
-                              height: 20,
-                              resizeMode: 'contain',
-                              tintColor: '#007BFF',
-                              marginLeft: 5,
-                            }}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => handleEditPress(item.id)}>
-                          <Image
-                            source={EDIT}
-                            style={{
-                              width: 20,
-                              height: 20,
-                              resizeMode: 'contain',
-                              tintColor: '#0F9D0F',
-                              marginLeft: 5,
-                            }}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => handleAssignmentPress(item.id)}>
-                          <Image
-                            source={VIEW}
-                            style={{
-                              width: 20,
-                              height: 20,
-                              resizeMode: 'contain',
-                              tintColor: '#0F9D0F',
-                              marginLeft: 5,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </View>
+                      <Text style={styles.cell}>{item.student_name}</Text>
+
+                      <Text style={styles.cell}>{item.grade}</Text>
+                      <Text style={styles.cell}>{item.submitted_on}</Text>
+                      <Text style={styles.cell}>{item.submit_status}</Text>
+                      <Text style={styles.cell}>{item.teacher_remark}</Text>
+                      <Text style={styles.cell}>{item.marks_scored}</Text>
                     </View>
                   ))}
               </View>
@@ -302,8 +215,6 @@ const styles = StyleSheet.create({
     padding: 10,
     color: 'black',
     fontSize: 16,
-    borderColor: '#EBEDF2',
-    backgroundColor: '#FFF',
   },
   main: {
     backgroundColor: 'white',
@@ -325,4 +236,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Student;
+export default AssignmentFinal;

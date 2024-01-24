@@ -8,6 +8,11 @@ import TimetableScreen from '../screens/TimetableScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import LoginScreen from '../screens/LoginScreens';
 import Lecture from '../screens/Lecture';
+import StudentDetails from '../screens/StudentDetails';
+import Assignment from '../screens/AssignmentScreen';
+import AssignmentDetails from '../screens/AssignmentDetails';
+import AssignmentFinal from '../screens/AssignmentFinalScreen';
+import StudentEdit from '../screens/StudentEditScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -45,6 +50,31 @@ const DrawerNavigator = () => {
       <Drawer.Screen
         name="Lecture"
         component={Lecture}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="StudentDetails"
+        component={StudentDetails}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="Assignment"
+        component={Assignment}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="AssignmentFinal"
+        component={AssignmentFinal}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="AssignmentDetails"
+        component={AssignmentDetails}
+        options={{headerShown: false}}
+      />
+      <Drawer.Screen
+        name="StudentEdit"
+        component={StudentEdit}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>
