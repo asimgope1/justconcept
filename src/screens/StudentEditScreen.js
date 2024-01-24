@@ -107,19 +107,26 @@ const StudentEdit = ({route, navigation}) => {
         console.error('Access token not found in AsyncStorage');
         return;
       }
+
       setLoading(true);
 
+      // Your payload
+
       const response = await fetch(
-        'https://justconcepts.in/app/justconceptapi/public/api/studentupdate/' +
-          id,
+        `https://justconcepts.in/app/justconceptapi/public/api/studentupdate/${id}`,
         {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${storedAccessToken}`,
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(result),
         },
       );
+
+      // Log the response text
+      const responseText = await response.text();
+      console.log('Response Text:', responseText);
 
       if (!response.ok) {
         console.error('Failed to fetch lectures:', response.status);
@@ -127,7 +134,7 @@ const StudentEdit = ({route, navigation}) => {
       }
 
       navigation.navigate('Student', {
-        id: id,
+        id: 94, // Change this to the correct ID
       });
     } catch (error) {
       console.error('Fetch error:', error);
@@ -135,6 +142,10 @@ const StudentEdit = ({route, navigation}) => {
       setLoading(false);
     }
   };
+
+  // Call the function
+  // updateStudent();
+
   const handleUpdate = () => {
     updateStudent();
   };
