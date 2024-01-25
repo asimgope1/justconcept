@@ -50,7 +50,7 @@ const StudentEdit = ({route, navigation}) => {
       'hardwareBackPress',
       () => {
         // Handle the back press (navigate to the previous screen)
-        navigation.navigate('Dashboard', 94);
+        navigation.navigate('Student');
         return true; // Prevent default behavior (exiting the app)
       },
     );

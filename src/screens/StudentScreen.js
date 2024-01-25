@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
   Image,
+  BackHandler,
 } from 'react-native';
 import Storage from '../utils/Storage';
 import React, {useEffect} from 'react';
@@ -62,6 +63,15 @@ const Student = ({route, navigation}) => {
     });
   };
   useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        // Handle the back press (navigate to the previous screen)
+        navigation.navigate('Dashboard');
+        return true; // Prevent default behavior (exiting the app)
+      },
+    );
+
     const fetchStudent = async () => {
       try {
         const storedAccessToken = await Storage.getAccessToken();
