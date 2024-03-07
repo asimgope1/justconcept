@@ -15,20 +15,24 @@ import {
   DASHBOARD,
   HOLIDAY,
   LOGO,
+  LOGOUT,
   MENU,
   STUDENT,
   TIMETABLE,
 } from '../utils/Imagepath';
 import {useIsFocused} from '@react-navigation/native';
+import Storage from '../utils/Storage';
 
 const menuItems = [
   {screen: 'Dashboard', label: 'Dashboard', image: DASHBOARD, key: 1},
-  {screen: 'Student', label: 'Assignment', image: STUDENT, key: 2},
+  {screen: 'Student', label: 'Student', image: STUDENT, key: 2},
   {screen: 'Timetable', label: 'Timetable', image: TIMETABLE, key: 3},
-  {screen: 'Calendar', label: 'Holiday', image: HOLIDAY, key: 4},
+  {screen: 'Assignment', label: 'Assignments/Offline Test', image: HOLIDAY, key: 4},
+  {screen: 'Calendar', label: 'Holiday', image: HOLIDAY, key: 5},
+  {screen: 'LogOut', label: 'Logout', image: LOGOUT, key: 6},
 ];
 
-const CustomDrawerContent = ({navigation}) => {
+const CustomDrawerContent = ({navigation, onLogout}) => {
   // console.log(navigation);
   // console.log('');
   const [userEmail, setUserEmail] = useState('');
@@ -55,10 +59,23 @@ const CustomDrawerContent = ({navigation}) => {
     navigation.navigate(screen);
   };
 
+  const handleLogout = async () => {
+    await Storage.clearStorage();
+    await Storage.setAuthenticatedStatus(false);
+    onLogout();
+    // navigation.navigate('Login');
+  };
+
   const renderItem = ({item}) => (
     <TouchableOpacity
       style={styles.item}
-      onPress={navigateToScreen(item.screen)}>
+      onPress={() => {
+        if (item.screen === 'LogOut') {
+          handleLogout();
+        } else {
+          navigateToScreen(item.screen)();
+        }
+      }}>
       <View>
         <Image
           source={item.image}

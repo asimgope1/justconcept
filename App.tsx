@@ -20,7 +20,7 @@ const App = () => {
   return (
     <NavigationContainer>
       {isAuthenticated ? (
-        <DrawerNavigator />
+        <DrawerNavigator onLogout={()=>setIsAuthenticated(false)}/>
       ) : (
         <AuthNavigator onLogin={() => setIsAuthenticated(true)} />
       )}

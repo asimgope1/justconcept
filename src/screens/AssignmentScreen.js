@@ -18,32 +18,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import {DASHBOARD, EYE, VIEW} from '../utils/Imagepath';
 
 const Assignment = ({route, navigation}) => {
-  const id = route.params.id;
+  // const id = route.params.id;
 
   const [result, setResult] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const data = [
-    // Your data goes here
-    {
-      srNo: '1',
-      name: 'John Doe',
-      school: 'Example School',
-      gradeAndSection: '10A',
-      enrollmentNo: '12345',
-      board: 'State',
-      mobileNumber: '123-456-7890',
-    },
-    {
-      srNo: '1',
-      name: 'John Doe',
-      school: 'Example School',
-      gradeAndSection: '10A',
-      enrollmentNo: '12345',
-      board: 'State',
-      mobileNumber: '123-456-7890',
-    },
-    // Add more data as needed
-  ];
+
   useEffect(() => {
     console.log('object', navigation.navigate);
     const backHandler = BackHandler.addEventListener(
@@ -55,21 +34,21 @@ const Assignment = ({route, navigation}) => {
       },
     );
 
-    const fetchStudent = async () => {
-      try {
-        // ... (Your existing code for fetching data)
-      } catch (error) {
-        console.error('Fetch error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // const fetchStudent = async () => {
+    //   try {
+    //     // ... (Your existing code for fetching data)
+    //   } catch (error) {
+    //     console.error('Fetch error:', error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
-    fetchStudent();
+    // fetchStudent();
 
     // Cleanup the event listener on component unmount
     return () => backHandler.remove();
-  }, [navigation, id]);
+  }, [navigation]);
 
   const handleViewPress = id => {
     // console.log(date);
@@ -88,6 +67,8 @@ const Assignment = ({route, navigation}) => {
 
   useEffect(() => {
     const fetchStudent = async () => {
+      const id = await Storage.getUserId();
+      // console.log('id', id);
       try {
         const storedAccessToken = await Storage.getAccessToken();
 
@@ -96,10 +77,27 @@ const Assignment = ({route, navigation}) => {
           return;
         }
         setLoading(true);
+        const response1 = await fetch(
+          'https://justconcepts.in/app/justconceptapi/public/api/studentprofile/' +
+            id,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${storedAccessToken}`,
+            },
+          },
+        );
+        if (!response1.ok) {
+          console.error('Failed to fetch lectures:', response.status);
+          return;
+        }
+
+        const result1 = await response1.json();
+        console.log('result1', result1.data[0].id, id);
 
         const response = await fetch(
           'https://justconcepts.in/app/justconceptapi/public/api/studentassignmentList/' +
-            id,
+            result1.data[0].id,
           {
             method: 'GET',
             headers: {
@@ -220,7 +218,7 @@ const Assignment = ({route, navigation}) => {
                   <Text style={styles.headerCell}>Action</Text>
                 </View>
 
-                {result.length > 0 &&
+                {result.length > 0 ? (
                   result.map((item, index) => (
                     <View key={index} style={styles.tableRow}>
                       <Text style={styles.cell}>{index + 1}</Text>
@@ -266,7 +264,19 @@ const Assignment = ({route, navigation}) => {
                         </TouchableOpacity>
                       </View>
                     </View>
-                  ))}
+                  ))
+                ) : (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 20,
+                    }}>
+                    <Text style={{color: 'black', fontSize: 16}}>
+                      No Data Found
+                    </Text>
+                  </View>
+                )}
               </View>
             </ScrollView>
           </View>

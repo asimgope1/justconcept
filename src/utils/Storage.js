@@ -28,6 +28,18 @@ const Storage = {
       return null;
     }
   },
+  getUserId: async () => {
+    try {
+      const responseString = await AsyncStorage.getItem(
+        STORAGE_KEYS.LOGIN_RESPONSE,
+      );
+      const loginResponse = responseString ? JSON.parse(responseString) : null;
+      return loginResponse ? loginResponse.data.id : null;
+    } catch (error) {
+      console.error('Error getting user id from AsyncStorage:', error);
+      return null;
+    }
+  },
 
   setAuthenticatedStatus: async status => {
     try {

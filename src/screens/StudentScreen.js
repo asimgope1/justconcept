@@ -16,7 +16,7 @@ import React, {useEffect} from 'react';
 import Header from '../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
 import {DASHBOARD, EDIT, EYE, VIEW} from '../utils/Imagepath';
-
+import {exportDataToExcel} from '../utils/fileSave';
 const Student = ({route, navigation}) => {
   const [result, setResult] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -135,7 +135,9 @@ const Student = ({route, navigation}) => {
             <View style={styles.container}>
               <View>
                 <View style={styles.buttons}>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                  // onPress={() => exportDataToExcel(result, 'studentList')}
+                  >
                     <LinearGradient
                       colors={['#90caf9', '#047edf']}
                       start={{x: 0, y: 0}}

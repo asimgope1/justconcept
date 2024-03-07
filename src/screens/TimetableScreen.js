@@ -104,10 +104,19 @@ const DashboardScreen = ({navigation}) => {
         const dates = result.data.map(lecture => lecture.date);
         setAllDates(dates);
 
+        // const subjectDotColorMap = {
+        //   Chem: 'purple',
+        //   Bio: 'green',
+        //   Science: 'red',
+        //   Physics: '#FEA500',
+        //   Math: '#0D86D5',
+        // };
         const subjectDotColorMap = {
-          Chem: 'purple',
-          Bio: 'green',
-          Science: 'red',
+          1: 'orange',
+          2: 'purple',
+          3: '#0E86D4',
+          4: 'green',
+          5: 'blue',
         };
 
         const markedDatesData = {};
@@ -116,8 +125,8 @@ const DashboardScreen = ({navigation}) => {
           const lecture = result.data.find(
             lecture => lecture.date === dateString,
           );
-          const subject = lecture ? lecture.subject : '';
-          const dotColor = subjectDotColorMap[subject] || 'blue';
+          const subject = lecture ? lecture.subid : '';
+          const dotColor = subjectDotColorMap[subject] || 'red';
 
           markedDatesData[dateString] = {
             customStyles: {
@@ -426,9 +435,9 @@ const DashboardScreen = ({navigation}) => {
                   }}>
                   <View
                     style={{
-                      width: 70,
+                      // width: 70,
                       height: 20,
-
+                      paddingRight: 5,
                       backgroundColor: 'purple',
                       borderRadius: 3,
                       marginBottom: 2,
@@ -437,9 +446,10 @@ const DashboardScreen = ({navigation}) => {
                   </View>
                   <View
                     style={{
-                      width: 70,
+                      // width: 50,
                       height: 20,
                       marginBottom: 2,
+                      paddingRight: 5,
 
                       backgroundColor: 'green',
                       borderRadius: 3,
@@ -448,23 +458,35 @@ const DashboardScreen = ({navigation}) => {
                   </View>
                   <View
                     style={{
-                      width: 70,
+                      // width: 50,
                       height: 20,
                       marginBottom: 2,
-                      backgroundColor: 'red',
+                      backgroundColor: 'blue',
                       borderRadius: 3,
+                      paddingRight: 5,
                     }}>
                     <Text style={{color: 'white'}}> Science</Text>
                   </View>
                   <View
                     style={{
-                      width: 70,
+                      // width: 50,
                       height: 20,
 
-                      backgroundColor: 'yellow',
+                      backgroundColor: 'orange',
+                      borderRadius: 3,
+                      paddingRight: 5,
+                    }}>
+                    <Text style={{color: 'white'}}> Physics</Text>
+                  </View>
+                  <View
+                    style={{
+                      // width: 50,
+                      height: 20,
+                      paddingRight: 5,
+                      backgroundColor: '#0E86D4',
                       borderRadius: 3,
                     }}>
-                    <Text style={{color: 'black'}}> Physics</Text>
+                    <Text style={{color: 'white'}}> Math</Text>
                   </View>
                 </View>
               </View>

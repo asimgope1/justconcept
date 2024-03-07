@@ -225,6 +225,8 @@ const CalendarScreen = ({navigation}) => {
               alignItems: 'center',
             }}>
             <Calendar
+              current={currentMonth}
+              key={currentMonth}
               style={styles.calendar}
               theme={{
                 backgroundColor: '#f2edf3',
@@ -329,7 +331,7 @@ const CalendarScreen = ({navigation}) => {
                 }
               }}
               onDayPress={handleDayPress}
-              current={getTodayDate()} // Set the initial date
+              // current={getTodayDate()} // Set the initial date
             />
 
             {selectedDate && (

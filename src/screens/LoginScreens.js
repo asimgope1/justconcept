@@ -26,6 +26,10 @@ const LoginScreen = ({onLogin, onLogout}) => {
   const handleLogin = async () => {
     try {
       setLoading(true);
+      if (email == '' || password == '') {
+        Alert.alert('Login Failed', 'Please enter email and password.');
+        return;
+      }
 
       const requestBody = {
         email: email,

@@ -78,12 +78,14 @@ const ScreensStack = () => (
   </Stack.Navigator>
 );
 
-const DrawerNavigator = () => {
+const DrawerNavigator = ({onLogout}) => {
   return (
     <Drawer.Navigator
       initialRouteName="ScreensStack"
       screenOptions={{drawerPosition: 'right'}}
-      drawerContent={props => <CustomDrawerContent {...props} />}>
+      drawerContent={props => (
+        <CustomDrawerContent {...props} onLogout={onLogout} />
+      )}>
       <Drawer.Screen
         name="ScreensStack"
         component={ScreensStack}
