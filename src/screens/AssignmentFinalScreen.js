@@ -108,6 +108,7 @@ const AssignmentFinal = ({route, navigation}) => {
 
         if (result.data) {
           setResult(result.data);
+          // console.log(result.data);
         } else {
           console.error('Data not available or empty array.');
         }
@@ -175,11 +176,14 @@ const AssignmentFinal = ({route, navigation}) => {
                   <Text style={styles.headerCell}>Submitted On</Text>
                   <Text style={styles.headerCell}>Status</Text>
                   <Text style={styles.headerCell}>Teacher Remark</Text>
+                  <Text style={styles.headerCell}>Min Scored Marks</Text>
+                  <Text style={styles.headerCell}>Avg Scored Marks</Text>
+                  <Text style={styles.headerCell}>Max Scored Marks</Text>
                   <Text style={styles.headerCell}>Marks Scored</Text>
                 </View>
 
-                {result.length > 0 &&
-                  result.map((item, index) => (
+                {result?.data?.length > 0 &&
+                  result?.data.map((item, index) => (
                     <View key={index} style={styles.tableRow}>
                       <Text style={styles.cell}>{index + 1}</Text>
                       <Text style={styles.cell}>{item.student_name}</Text>
@@ -188,6 +192,11 @@ const AssignmentFinal = ({route, navigation}) => {
                       <Text style={styles.cell}>{item.submitted_on}</Text>
                       <Text style={styles.cell}>{item.submit_status}</Text>
                       <Text style={styles.cell}>{item.teacher_remark}</Text>
+                      <Text style={styles.cell}>{result.min_marks_scored}</Text>
+                      <Text style={styles.cell}>
+                        {result.average_marks_scored}
+                      </Text>
+                      <Text style={styles.cell}>{result.max_marks_scored}</Text>
                       <Text style={styles.cell}>{item.marks_scored}</Text>
                     </View>
                   ))}

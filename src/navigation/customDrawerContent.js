@@ -27,7 +27,12 @@ const menuItems = [
   {screen: 'Dashboard', label: 'Dashboard', image: DASHBOARD, key: 1},
   {screen: 'Student', label: 'Student', image: STUDENT, key: 2},
   {screen: 'Timetable', label: 'Timetable', image: TIMETABLE, key: 3},
-  {screen: 'Assignment', label: 'Assignments/Offline Test', image: HOLIDAY, key: 4},
+  {
+    screen: 'Assignment',
+    label: 'Assignments/Offline Test',
+    image: HOLIDAY,
+    key: 4,
+  },
   {screen: 'Calendar', label: 'Holiday', image: HOLIDAY, key: 5},
   {screen: 'LogOut', label: 'Logout', image: LOGOUT, key: 6},
 ];
@@ -36,10 +41,56 @@ const CustomDrawerContent = ({navigation, onLogout}) => {
   // console.log(navigation);
   // console.log('');
   const [userEmail, setUserEmail] = useState('');
+  const [studentDetails, setStudentDetails] = useState({});
+  const [loading, setLoading] = useState({});
 
   useEffect(() => {
     // Fetch user email from AsyncStorage when component mounts
     fetchUserEmail();
+  }, []);
+  useEffect(() => {
+    const fetchStudent = async () => {
+      const id = await Storage.getUserId();
+      try {
+        const storedAccessToken = await Storage.getAccessToken();
+
+        if (!storedAccessToken) {
+          console.error('Access token not found in AsyncStorage');
+          return;
+        }
+        setLoading(true);
+
+        const response = await fetch(
+          'https://justconcepts.in/app/justconceptapi/public/api/studentprofile/' +
+            id,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${storedAccessToken}`,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          console.error('Failed to fetch student details:', response.status);
+          return;
+        }
+
+        const result = await response.json();
+
+        if (result.data) {
+          setStudentDetails(result.data[0]);
+          // console.log(result.data);
+        } else {
+          console.error('Data not available or empty array.');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStudent();
   }, []);
 
   const fetchUserEmail = async () => {
@@ -114,16 +165,31 @@ const CustomDrawerContent = ({navigation, onLogout}) => {
           alignItems: 'center',
           //   justifyContent: 'center',
         }}>
-        <Image
-          source={LOGO}
-          style={{
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            resizeMode: 'contain',
-            alignSelf: 'center',
-          }}
-        />
+        {studentDetails.profileimage ? (
+          <Image
+            source={{
+              uri: studentDetails.profileimage,
+            }}
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              resizeMode: 'contain',
+              alignSelf: 'center',
+            }}
+          />
+        ) : (
+          <Image
+            source={LOGO}
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              resizeMode: 'contain',
+              alignSelf: 'center',
+            }}
+          />
+        )}
         <View
           style={{
             paddingLeft: 10,

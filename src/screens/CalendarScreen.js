@@ -330,6 +330,30 @@ const CalendarScreen = ({navigation}) => {
                   );
                 }
               }}
+              dayComponent={({date}) => {
+                return (
+                  <TouchableOpacity onPress={() => handleDayPress(date)}>
+                    <View
+                      style={{
+                        // justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 0.1 * Dimensions.get('window').height,
+                        backgroundColor:
+                          date.dateString ==
+                          new Date().toLocaleDateString('en-CA')
+                            ? '#F4EBD5'
+                            : '#f2edf3',
+                      }}>
+                      <Text
+                        style={{
+                          color: '#007BFF',
+                        }}>
+                        {date.day}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
               onDayPress={handleDayPress}
               // current={getTodayDate()} // Set the initial date
             />
