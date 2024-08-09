@@ -441,7 +441,12 @@ const DashboardScreen = ({navigation}) => {
                             style={{
                               justifyContent: 'center',
                               alignItems: 'center',
-                              backgroundColor: '#f2edf3',
+                              // backgroundColor: '#f2edf3',
+                              backgroundColor:
+                                date.dateString ==
+                                new Date().toLocaleDateString('en-CA')
+                                  ? '#F4EBD5'
+                                  : '#f2edf3',
                             }}>
                             <Text
                               style={{

@@ -44,13 +44,13 @@ const CalendarScreen = ({navigation}) => {
   const {width, height} = Dimensions.get('window');
 
   // Move getTodayDate function declaration here
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = `${today.getMonth() + 1}`.padStart(2, '0');
-    const day = `${today.getDate()}`.padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
+  // const getTodayDate = () => {
+  //   const today = new Date();
+  //   const year = today.getFullYear();
+  //   const month = `${today.getMonth() + 1}`.padStart(2, '0');
+  //   const day = `${today.getDate()}`.padStart(2, '0');
+  //   return `${year}-${month}-${day}`;
+  // };
 
   useEffect(() => {
     fetchDates();
@@ -85,7 +85,7 @@ const CalendarScreen = ({navigation}) => {
 
       const apiResponseData = await response.json();
       setApiResponse(apiResponseData);
-
+      console.log(apiResponseData);
       const markedDatesData = {};
       apiResponseData.data.forEach(holiday => {
         markedDatesData[holiday.start_date] = {
@@ -104,6 +104,21 @@ const CalendarScreen = ({navigation}) => {
           },
         };
       });
+      // markedDates['2024-03-11'] = {
+      //   marked: true,
+      //   dotColor: 'none',
+      //   customStyles: {
+      //     container: {
+      //       backgroundColor: 'green',
+      //       borderRadius: 0,
+      //       height: 0.1 * Dimensions.get('window').height,
+      //       width: 0.127 * Dimensions.get('window').width,
+      //     },
+      //     text: {
+      //       color: 'white',
+      //     },
+      //   },
+      // };
 
       setMarkedDates(markedDatesData);
     } catch (error) {
@@ -234,7 +249,8 @@ const CalendarScreen = ({navigation}) => {
                 textSectionTitleColor: '#b6c1cd',
                 selectedDayBackgroundColor: '#00adf5',
                 selectedDayTextColor: '#ffffff',
-                todayTextColor: '#DDDDDD',
+                todayTextColor: '#FEA500',
+                // todayBackgroundColor: '#00adf5',
                 textMonthColor: '#007BFF',
                 dayTextColor: '#2d4150',
                 weekTextColor: '#007BFF',
@@ -330,30 +346,30 @@ const CalendarScreen = ({navigation}) => {
                   );
                 }
               }}
-              dayComponent={({date}) => {
-                return (
-                  <TouchableOpacity onPress={() => handleDayPress(date)}>
-                    <View
-                      style={{
-                        // justifyContent: 'center',
-                        alignItems: 'center',
-                        height: 0.1 * Dimensions.get('window').height,
-                        backgroundColor:
-                          date.dateString ==
-                          new Date().toLocaleDateString('en-CA')
-                            ? '#F4EBD5'
-                            : '#f2edf3',
-                      }}>
-                      <Text
-                        style={{
-                          color: '#007BFF',
-                        }}>
-                        {date.day}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
+              // dayComponent={({date}) => {
+              //   return (
+              //     <TouchableOpacity onPress={() => handleDayPress(date)}>
+              //       <View
+              //         style={{
+              //           // justifyContent: 'center',
+              //           alignItems: 'center',
+              //           height: 0.1 * Dimensions.get('window').height,
+              //           backgroundColor:
+              //             date.dateString ==
+              //             new Date().toLocaleDateString('en-CA')
+              //               ? '#F4EBD5'
+              //               : '#f2edf3',
+              //         }}>
+              //         <Text
+              //           style={{
+              //             color: '#007BFF',
+              //           }}>
+              //           {date.day}
+              //         </Text>
+              //       </View>
+              //     </TouchableOpacity>
+              //   );
+              // }}
               onDayPress={handleDayPress}
               // current={getTodayDate()} // Set the initial date
             />
